@@ -33,17 +33,15 @@ public class MoveCommand : Command
 
 public class TurnCommand : Command
 {
-    public override void Execute (PlayerController actor) { actor.Turn (m_NewFacingDirection); }
-    public override void Undo (PlayerController actor) { actor.Turn (m_OldFacingDirection); }
+    public override void Execute (PlayerController actor) { actor.Turn (m_IsTurningRight); }
+    public override void Undo (PlayerController actor) { actor.Turn (!m_IsTurningRight); }
 
-    public TurnCommand (int oldFacingDirection, int newFacingDirection)
+    public TurnCommand (bool isTurningRight)
     {
-        m_OldFacingDirection = oldFacingDirection;
-        m_NewFacingDirection = newFacingDirection;
+        m_IsTurningRight = isTurningRight;
     }
 
-    private int m_OldFacingDirection;
-    private int m_NewFacingDirection;
+    private bool m_IsTurningRight;
 }
 
 public class ToggleGrabCommand : Command
@@ -79,11 +77,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void AddTurnCommand (int newFacingDirection)
+    private void AddTurnCommand (bool isTurningRight)
     {
-        if (CanTurn (newFacingDirection))
+        int direction = isTurningRight ? -1 : 1;
+        if (CanTurn (Modulo ((int)m_FacingDirection + direction, 4)))
         {
-            TurnCommand command = new TurnCommand ((int)m_FacingDirection, newFacingDirection);
+            TurnCommand command = new TurnCommand (isTurningRight);
             command.Execute (this);
             m_CommandStack.Push (command);
         }
@@ -128,16 +127,10 @@ public class PlayerController : MonoBehaviour
                     AddMoveCommand (0, -1);
                     break;
                 case "TurnRight":
-                    AddTurnCommand ((int)EFacingDirection.Right);
+                    AddTurnCommand (true);
                     break;
                 case "TurnLeft":
-                    AddTurnCommand ((int)EFacingDirection.Left);
-                    break;
-                case "TurnUp":
-                    AddTurnCommand ((int)EFacingDirection.Up);
-                    break;
-                case "TurnDown":
-                    AddTurnCommand ((int)EFacingDirection.Down);
+                    AddTurnCommand (false);
                     break;
                 case "Undo":
                     UndoCommand ();
@@ -182,6 +175,7 @@ public class PlayerController : MonoBehaviour
         {
             if (facingTile.IsEmpty ())
             {
+                new BinEvent ((Bin)m_Bin).Push ();
                 facingTile.SetTileObject (m_Bin);
                 m_Bin.transform.SetParent (null, true);
                 m_Bin = null;
@@ -218,18 +212,18 @@ public class PlayerController : MonoBehaviour
         return currentTileCoordinates + facingTileOffset;
     }
 
-    public void Turn (int directionToFace)
+    public void Turn (bool isTurningRight)
     {
-        if ((int)m_FacingDirection == Modulo (directionToFace + 1, 4))
+        if (isTurningRight)
         {
             transform.Rotate (Vector3.forward, -90);
-            m_FacingDirection = (EFacingDirection)directionToFace;
         }
-        else if ((int)m_FacingDirection == Modulo (directionToFace - 1, 4))
+        else
         {
             transform.Rotate (Vector3.forward, 90);
-            m_FacingDirection = (EFacingDirection)directionToFace;
         }
+        int direction = isTurningRight ? -1 : 1;
+        m_FacingDirection = (EFacingDirection)Modulo ((int)m_FacingDirection + direction, 4);
     }
 
     private bool CanTurn (int newFacingDirection)

@@ -4,16 +4,19 @@ public enum ETileObjectType
 {
     None,
     Bin,
+    BinGoal,
+    BinSpawner,
 }
 
 public class TileObject : MonoBehaviour
 {
     [SerializeField] private ETileObjectType m_Type;
-    [SerializeField] private int m_Number;
+    private TileCoordinates m_Coordinates;
 
-    public TileObject (ETileObjectType type)
+    public virtual void Init (ETileObjectType type, int x, int y, string[] args)
     {
         m_Type = type;
+        m_Coordinates = new TileCoordinates (x, y);
     }
 
     public ETileObjectType GetObjectType ()
@@ -26,13 +29,23 @@ public class TileObject : MonoBehaviour
         m_Type = type;
     }
 
-    public int GetNumber ()
+    public TileCoordinates GetCoordinates ()
     {
-        return m_Number;
+        return m_Coordinates;
     }
 
-    public void SetNumber (int number)
+    public void SetCoordinates (TileCoordinates coordinates)
     {
-        m_Number = number;
+        m_Coordinates = coordinates;
+    }
+
+    public virtual bool IsObstacle ()
+    {
+        return false;
+    }
+
+    public virtual bool CanBeGrabed ()
+    {
+        return false;
     }
 }
