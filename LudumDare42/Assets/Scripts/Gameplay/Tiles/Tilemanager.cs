@@ -29,6 +29,16 @@ public class TileManager
         this.m_Tiles.Add (tile.GetCoordinates (), tile);
     }
 
+    public void SetTileObject(TileCoordinates coordinates, TileObject tileObject)
+    {
+        Tile tile = null;
+        m_Tiles.TryGetValue (coordinates, out tile);
+        if(tile != null)
+        {
+            tile.SetTileObject (tileObject);
+        }
+    }
+
     public void Reset ()
     {
         m_Tiles.Clear ();

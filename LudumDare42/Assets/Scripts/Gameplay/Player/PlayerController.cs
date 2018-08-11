@@ -166,7 +166,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             TileCoordinates facingCoordinate = GetFacingTileCoordinates ();
-            Tile nextBarrelTile = TileManagerProxy.Get ().GetTile (facingCoordinate);
+            Tile nextBarrelTile = TileManagerProxy.Get ().GetTile (new TileCoordinates(facingCoordinate.x + xDir, facingCoordinate.y + yDir));
             return nextBarrelTile != null && nextTruckTile != null && nextTruckTile.IsEmpty () && nextBarrelTile.IsEmpty ();
         }
     }
@@ -182,6 +182,7 @@ public class PlayerController : MonoBehaviour
         {
             if (facingTile.IsEmpty ())
             {
+                facingTile.SetTileObject (m_Bin);
                 m_Bin.transform.SetParent (null, true);
                 m_Bin = null;
             }
@@ -191,6 +192,7 @@ public class PlayerController : MonoBehaviour
             TileObject bin = facingTile.GetTileObject ();
             if (bin != null && bin.GetObjectType () == ETileObjectType.Bin)
             {
+                facingTile.SetTileObject (null);
                 bin.transform.SetParent (transform, true);
                 m_Bin = bin;
             }

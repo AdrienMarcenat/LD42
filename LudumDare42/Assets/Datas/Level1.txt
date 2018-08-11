@@ -1,4 +1,12 @@
 ﻿Tile 5 6 Wall
-Tile 1 2 Goal
+Tile 0 0 Normal
+Tile 1 0 Normal
+Tile 0 1 Normal
+Tile -1 0 Normal
+Tile 0 -1 Normal
+Tile -1 1 Normal
+Tile 1 -1 Normal
+Tile 1 1 Normal
 Player 0 0 Up
 TileObject -1 -2 Bin 4
+TileObject 1 1 Bin 4

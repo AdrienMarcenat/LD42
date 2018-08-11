@@ -62,6 +62,7 @@ public class LevelParser : MonoBehaviour
                     TileObject tileObject = tileGameObject.AddComponent<TileObject> ();
                     tileObject.SetNumber (number);
                     tileObject.SetType (tileObjectType);
+                    TileManagerProxy.Get ().SetTileObject (new TileCoordinates (x, y), tileObject);
                 }
                 break;
             }
