@@ -1,0 +1,10 @@
+Pause:Escape
+Right:RightArrow
+Left:LeftArrow
+Up:UpArrow
+Down:DownArrow
+TurnRight:D
+TurnLeft:Q
+TurnUp:Z
+TurnDown:S
+Undo:U

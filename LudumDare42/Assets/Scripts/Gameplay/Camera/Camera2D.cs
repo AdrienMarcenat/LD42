@@ -17,12 +17,12 @@ public class Camera2D : MonoBehaviour
     {
         m_Player = GameObject.FindGameObjectWithTag ("Player").transform;
         m_Lanes = new List<Transform> ();
-        foreach (Transform lane in GameObject.Find ("Lanes").GetComponentsInChildren<Transform> ())
-        {
-            m_Lanes.Add (lane);
-        }
-        m_Lanes.RemoveAt (0);
-        m_Lanes.Sort ((Transform t1, Transform t2) => t1.position.y.CompareTo (t2.position.y));
+        //foreach (Transform lane in GameObject.Find ("Lanes").GetComponentsInChildren<Transform> ())
+        //{
+        //    m_Lanes.Add (lane);
+        //}
+        //m_Lanes.RemoveAt (0);
+        //m_Lanes.Sort ((Transform t1, Transform t2) => t1.position.y.CompareTo (t2.position.y));
     }
 
     void FixedUpdate ()
