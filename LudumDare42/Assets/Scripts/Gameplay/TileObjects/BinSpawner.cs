@@ -60,7 +60,7 @@ public class BinSpawner : TileObject
     {
         GameObject binGameObject = GameObject.Instantiate (m_BinPrefab);
         TileCoordinates coordinates = GetCoordinates ();
-        binGameObject.transform.position = new Vector3 (coordinates.x, coordinates.y, 0);
+        binGameObject.transform.position = new Vector3 (coordinates.x.ToWorldUnit(), coordinates.y.ToWorldUnit (), 0);
         Bin bin = binGameObject.GetComponent<Bin> ();
         bin.Init (ETileObjectType.Bin, coordinates.x, coordinates.y, new string[] { "0" });
         TileManagerProxy.Get ().SetTileObject (coordinates, bin);

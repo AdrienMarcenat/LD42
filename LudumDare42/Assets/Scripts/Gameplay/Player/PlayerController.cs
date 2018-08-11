@@ -227,11 +227,11 @@ public class PlayerController : MonoBehaviour
         m_FacingDirection = (EFacingDirection)Modulo ((int)m_FacingDirection + direction, 4);
         if (isTurningRight)
         {
-            m_TargetAngle = transform.rotation.eulerAngles + new Vector3 (0, 0, -90);
+            m_TargetAngle = transform.rotation.eulerAngles + new Vector3 (0, 0, 90);
         }
         else
         {
-            m_TargetAngle = transform.rotation.eulerAngles + new Vector3 (0, 0, 90);
+            m_TargetAngle = transform.rotation.eulerAngles + new Vector3 (0, 0, -90);
         }
     }
 
@@ -319,8 +319,8 @@ public class PlayerController : MonoBehaviour
 
     private static Dictionary<EFacingDirection, float> ms_FacingAngles = new Dictionary<EFacingDirection, float> ()
     {
-        { EFacingDirection.Right, -90 },
-        { EFacingDirection.Left, 90 },
+        { EFacingDirection.Right, 90 },
+        { EFacingDirection.Left, -90 },
         { EFacingDirection.Up, 0 },
         { EFacingDirection.Down, 180 },
     };
