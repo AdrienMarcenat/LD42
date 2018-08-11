@@ -25,20 +25,43 @@ public class LevelEvent : GameEvent
 
 public class LevelManager
 {
-    private int m_CurrentLevel = 0;
-
-    public void LoadScene (int levelIndex)
+    private int m_CurrentLevel = 1;
+    
+    public LevelManager ()
     {
-        new LevelEvent (m_CurrentLevel, false).Push ();
-        m_CurrentLevel = levelIndex;
-        SceneManager.LoadScene (levelIndex);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+    
+    ~LevelManager ()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    public void LoadScene (string levelName)
+public void LoadScene (int sceneIndex)
     {
         new LevelEvent (m_CurrentLevel, false).Push ();
-        m_CurrentLevel = SceneManager.GetSceneByName(levelName).buildIndex;
-        SceneManager.LoadScene (levelName);
+        SceneManager.LoadScene (sceneIndex);
+    }
+
+    public void LoadScene (string sceneName)
+    {
+        new LevelEvent (m_CurrentLevel, false).Push ();
+        SceneManager.LoadScene (sceneName);
+    }
+
+    public void LoadLevel ()
+    {
+        LoadScene ("Scenes/Level");
+    }
+
+    public void SetLevelIndex (int levelIndex)
+    {
+        m_CurrentLevel = levelIndex;
+    }
+
+    public void NextLevel ()
+    {
+        m_CurrentLevel++;
     }
 
     public string GetActiveSceneName()
@@ -46,9 +69,14 @@ public class LevelManager
         return SceneManager.GetActiveScene ().name;
     }
 
-    private void OnSceneLoaded (Scene scene, LoadSceneMode mode)
+    public void OnSceneLoaded (Scene scene, LoadSceneMode mode)
     {
-        new LevelEvent (scene.buildIndex, true).Push ();
+        if (GetActiveSceneName() == "Level")
+        {
+            TileManagerProxy.Get ().Reset ();
+            LevelParser.GenLevel ("Datas/Level" + m_CurrentLevel + ".txt");
+            new LevelEvent (m_CurrentLevel, true).Push ();
+        }
     }
 }
 

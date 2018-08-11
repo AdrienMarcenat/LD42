@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class GameFlowGameOverState : HSMState
+public class GameFlowEndLevelState : HSMState
 {
     public override void OnEnter ()
     {
@@ -17,7 +17,7 @@ public class GameFlowGameOverState : HSMState
                 ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowMenuState));
                 break;
             case EGameFlowAction.Retry:
-                ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowNormalState));
+                ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowLevelState));
                 break;
         }
     }

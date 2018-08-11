@@ -3,6 +3,9 @@
     Resume,
     Retry,
     Start,
+    NextLevel,
+    LevelSelection,
+    Menu,
     Quit,
 }
 
@@ -25,11 +28,12 @@ public class GameFlowHSM : HSM
 {
     public GameFlowHSM ()
         : base (new GameFlowMenuState ()
-              , new GameFlowNormalState ()
+              , new GameFlowLevelSelectionState()
+              , new GameFlowLevelState ()
               , new GameFlowPauseState ()
-              , new GameFlowGameOverState ()
+              , new GameFlowEndLevelState ()
         )
     {
-        Start (typeof (GameFlowNormalState));
+        Start (typeof (GameFlowLevelState));
     }
 }

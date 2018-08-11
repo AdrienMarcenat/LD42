@@ -4,11 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class LevelParser : MonoBehaviour
+public static class LevelParser
 {
-    [SerializeField] private GameObject m_TilePrefab;
-    [SerializeField] private GameObject m_PlayerPrefab;
-
     private static Dictionary<string, ETileType> ms_CharToTileType = new Dictionary<string, ETileType> ()
     {
         { "X", ETileType.None },
@@ -17,14 +14,8 @@ public class LevelParser : MonoBehaviour
         { "S", ETileType.Start },
         { "A", ETileType.Acid },
     };
-
-    private void Awake ()
-    {
-        TileManagerProxy.Get ().Reset ();
-        ReadFile ("Datas/Level1.txt");
-    }
-
-    public void ReadFile (string filename)
+    
+    public static void GenLevel (string filename)
     {
 #if UNITY_EDITOR
         filename = "Assets/" + filename;
@@ -55,7 +46,7 @@ public class LevelParser : MonoBehaviour
                     yPlayer = y;
                     playerFacingDirection = (EFacingDirection)Enum.Parse (typeof (EFacingDirection), (String)words.GetValue (1), true);
                 }
-                GameObject tileGameObject = GameObject.Instantiate (m_TilePrefab);
+                GameObject tileGameObject = GameObject.Instantiate (RessourceManager.LoadPrefab ("Tile"));
                 tileGameObject.transform.position = new Vector3 (x, y, 0);
                 Tile tile = tileGameObject.AddComponent<Tile> ();
                 tile.SetCoordinates (new TileCoordinates (x, y));
@@ -81,7 +72,7 @@ public class LevelParser : MonoBehaviour
         }
         
         {
-            GameObject playerObject = GameObject.Instantiate (m_PlayerPrefab);
+            GameObject playerObject = GameObject.Instantiate (RessourceManager.LoadPrefab ("Player"));
             playerObject.transform.position = new Vector3 (xPlayer, yPlayer, 0);
             PlayerController controller = playerObject.AddComponent<PlayerController> ();
             controller.SetFacingDirection (playerFacingDirection);

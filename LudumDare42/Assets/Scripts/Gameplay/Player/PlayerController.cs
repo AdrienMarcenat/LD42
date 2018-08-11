@@ -195,7 +195,7 @@ public class PlayerController : MonoBehaviour
     public void SetFacingDirection (EFacingDirection newFacingOrientation)
     {
         m_FacingDirection = newFacingOrientation;
-        transform.rotation = new Quaternion (0, 0, ms_FacingAngles[newFacingOrientation], 0);
+        transform.rotation = Quaternion.Euler (0, 0, ms_FacingAngles[newFacingOrientation]);
     }
 
     private int Modulo (int a, int b)

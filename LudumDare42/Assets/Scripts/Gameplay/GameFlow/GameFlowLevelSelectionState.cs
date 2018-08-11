@@ -1,8 +1,8 @@
-﻿public class GameFlowMenuState : HSMState
+﻿public class GameFlowLevelSelectionState : HSMState
 {
     public override void OnEnter ()
     {
-        LevelManagerProxy.Get ().LoadScene ("Scenes/MainMenu");
+        LevelManagerProxy.Get ().LoadScene ("Scenes/LevelSelection");
         this.RegisterAsListener ("Game", typeof (GameFlowEvent));
     }
 
@@ -10,7 +10,7 @@
     {
         if (flowEvent.GetAction () == EGameFlowAction.Start)
         {
-            ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowLevelSelectionState));
+            ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowLevelState));
         }
     }
 

@@ -4,11 +4,11 @@ using System.Collections;
 public class PlayerHSM : HSM
 {
     public PlayerHSM ()
-        : base (new GameFlowNormalState ()
+        : base (new GameFlowLevelState ()
               , new GameFlowPauseState ()
         )
     {
-        Start (typeof (GameFlowNormalState));
+        Start (typeof (GameFlowLevelState));
     }
 }
 

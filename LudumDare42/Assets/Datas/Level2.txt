@@ -1,0 +1,5 @@
+﻿X X X X X
+N N N N N
+S,Right X N,BinSpawner X N
+N N N N N
+X X X X X

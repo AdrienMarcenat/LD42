@@ -1,5 +1,5 @@
-﻿X X X X X X
-N N,Bin,1 N N N N
-X X N,BinGoal,1 N X X
-N N N S,Up N N N,BinSpawner
+﻿X X X X X X X
+X X N N X X X
+S,Right N N N N N,BinSpawner
+X X N N X X X
 X X X X X X X

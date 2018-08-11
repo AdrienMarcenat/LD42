@@ -1,15 +1,15 @@
 ﻿
-public class GameFlowNormalState : HSMState
+public class GameFlowLevelState : HSMState
 {
     public override void OnEnter ()
     {
-        LevelManagerProxy.Get ().LoadScene (1);
+        LevelManagerProxy.Get ().LoadLevel();
         this.RegisterAsListener ("Player", typeof (GameOverGameEvent), typeof (PlayerInputGameEvent));
     }
 
     public void OnGameEvent (GameOverGameEvent gameOver)
     {
-        ChangeNextTransition (HSMTransition.EType.Siblings, typeof (GameFlowGameOverState));
+        ChangeNextTransition (HSMTransition.EType.Siblings, typeof (GameFlowEndLevelState));
     }
 
     public void OnGameEvent (PlayerInputGameEvent inputEvent)

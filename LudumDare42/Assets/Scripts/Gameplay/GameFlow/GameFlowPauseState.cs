@@ -20,7 +20,6 @@ public class GameFlowPauseState : HSMState
     public override void OnEnter ()
     {
         UpdaterProxy.Get ().SetPause (true);
-        Time.timeScale = 0;
         this.RegisterAsListener ("Game", typeof (GameFlowEvent));
         this.RegisterAsListener ("Player", typeof (PlayerInputGameEvent));
         new PauseEvent (true).Push ();
@@ -30,11 +29,18 @@ public class GameFlowPauseState : HSMState
     {
         switch (flowEvent.GetAction ())
         {
-            case EGameFlowAction.Quit:
+            case EGameFlowAction.Menu:
                 ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowMenuState));
                 break;
+            case EGameFlowAction.LevelSelection:
+                ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowLevelSelectionState));
+                break;
+            case EGameFlowAction.NextLevel:
+                LevelManagerProxy.Get ().NextLevel ();
+                ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowLevelState));
+                break;
             case EGameFlowAction.Retry:
-                ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowNormalState));
+                ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowLevelState));
                 break;
             case EGameFlowAction.Resume:
                 ChangeNextTransition (HSMTransition.EType.Exit);
@@ -55,7 +61,6 @@ public class GameFlowPauseState : HSMState
         new PauseEvent (false).Push ();
         this.UnregisterAsListener ("Player");
         this.UnregisterAsListener ("Game");
-        Time.timeScale = 1;
         UpdaterProxy.Get ().SetPause (false);
     }
 }

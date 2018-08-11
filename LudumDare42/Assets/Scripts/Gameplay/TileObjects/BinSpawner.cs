@@ -14,12 +14,14 @@ public class BinSpawnCommand : Command
 public class BinSpawner : TileObject
 {
     private GameObject m_BinPrefab;
+    public static int ms_BinNumber;
 
     public override void Init (ETileObjectType type, int x, int y, string[] args)
     {
         base.Init (type, x, y, args);
         this.RegisterAsListener ("Player", typeof (PlayerInputGameEvent));
         m_BinPrefab = RessourceManager.LoadPrefab ("TileObject_Bin");
+        ms_BinNumber = 0;
     }
 
     private void OnDestroy ()
@@ -62,11 +64,13 @@ public class BinSpawner : TileObject
         Bin bin = binGameObject.GetComponent<Bin> ();
         bin.Init (ETileObjectType.Bin, coordinates.x, coordinates.y, new string[] { "0" });
         TileManagerProxy.Get ().SetTileObject (coordinates, bin);
+        ms_BinNumber++;
     }
 
     public void UnSpawnbin ()
     {
         Destroy (TileManagerProxy.Get ().GetTile (GetCoordinates ()).GetTileObject ().gameObject);
+        ms_BinNumber--;
     }
 
     public override bool IsObstacle ()
