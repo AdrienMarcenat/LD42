@@ -3,62 +3,20 @@ using UnityEngine;
 
 public enum EFacingDirection
 {
-    // Keep that order !!!
+    // Keep that order !!! (it has to be circular)
     Right,
     Up,
     Left,
     Down
 }
 
-public class Command
-{
-    public virtual void Execute (PlayerController actor) { }
-    public virtual void Undo (PlayerController actor) { }
-};
-
-public class MoveCommand : Command
-{
-    public override void Execute (PlayerController actor) { actor.Move (m_XDir, m_YDir); }
-    public override void Undo (PlayerController actor) { actor.Move (-m_XDir, -m_YDir); }
-
-    public MoveCommand (int xDir, int yDir)
-    {
-        m_XDir = xDir;
-        m_YDir = yDir;
-    }
-
-    private int m_XDir;
-    private int m_YDir;
-}
-
-public class TurnCommand : Command
-{
-    public override void Execute (PlayerController actor) { actor.Turn (m_IsTurningRight); }
-    public override void Undo (PlayerController actor) { actor.Turn (!m_IsTurningRight); }
-
-    public TurnCommand (bool isTurningRight)
-    {
-        m_IsTurningRight = isTurningRight;
-    }
-
-    private bool m_IsTurningRight;
-}
-
-public class ToggleGrabCommand : Command
-{
-    public override void Execute (PlayerController actor) { actor.ToggleGrab (); }
-    public override void Undo (PlayerController actor) { actor.ToggleGrab (); }
-}
-
 public class PlayerController : MonoBehaviour
 {
     private EFacingDirection m_FacingDirection;
     private TileObject m_Bin;
-    private Stack<Command> m_CommandStack;
 
     void Awake ()
     {
-        m_CommandStack = new Stack<Command> ();
         this.RegisterAsListener ("Player", typeof (PlayerInputGameEvent));
     }
 
@@ -71,9 +29,9 @@ public class PlayerController : MonoBehaviour
     {
         if (CanMoveTo (xDir, yDir))
         {
-            MoveCommand command = new MoveCommand (xDir, yDir);
-            command.Execute (this);
-            m_CommandStack.Push (command);
+            MoveCommand command = new MoveCommand (gameObject, xDir, yDir);
+            command.Execute ();
+            CommandStackProxy.Get ().PushCommand (command);
         }
     }
 
@@ -82,9 +40,9 @@ public class PlayerController : MonoBehaviour
         int direction = isTurningRight ? -1 : 1;
         if (CanTurn (Modulo ((int)m_FacingDirection + direction, 4)))
         {
-            TurnCommand command = new TurnCommand (isTurningRight);
-            command.Execute (this);
-            m_CommandStack.Push (command);
+            TurnCommand command = new TurnCommand (gameObject, isTurningRight);
+            command.Execute ();
+            CommandStackProxy.Get ().PushCommand (command);
         }
     }
 
@@ -92,17 +50,9 @@ public class PlayerController : MonoBehaviour
     {
         if (CanToggleGrab ())
         {
-            ToggleGrabCommand command = new ToggleGrabCommand ();
-            command.Execute (this);
-            m_CommandStack.Push (command);
-        }
-    }
-
-    private void UndoCommand ()
-    {
-        if (m_CommandStack.Count != 0)
-        {
-            m_CommandStack.Pop ().Undo (this);
+            ToggleGrabCommand command = new ToggleGrabCommand (gameObject);
+            command.Execute ();
+            CommandStackProxy.Get().PushCommand (command);
         }
     }
 
@@ -131,9 +81,6 @@ public class PlayerController : MonoBehaviour
                     break;
                 case "TurnLeft":
                     AddTurnCommand (false);
-                    break;
-                case "Undo":
-                    UndoCommand ();
                     break;
                 case "Grab / Ungrab":
                     AddToggleGrabCommand ();
@@ -175,7 +122,7 @@ public class PlayerController : MonoBehaviour
         {
             if (facingTile.IsEmpty ())
             {
-                new BinEvent ((Bin)m_Bin).Push ();
+                //new BinEvent ((Bin)m_Bin).Push ();
                 facingTile.SetTileObject (m_Bin);
                 m_Bin.transform.SetParent (null, true);
                 m_Bin = null;
