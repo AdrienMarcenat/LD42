@@ -1,12 +1,5 @@
-﻿Tile 5 6 Wall
-Tile 0 0 Normal
-Tile 1 0 Normal
-Tile 0 1 Normal
-Tile -1 0 Normal
-Tile 0 -1 Normal
-Tile -1 1 Normal
-Tile 1 -1 Normal
-Tile 1 1 Normal
-Player 0 0 Up
-TileObject -1 -2 Bin 4
-TileObject 1 1 Bin 4
+﻿X X X X X X
+N N,Bin,1 N N N N
+W W G G W W
+N N N S,Up N N N
+X X X X X X X

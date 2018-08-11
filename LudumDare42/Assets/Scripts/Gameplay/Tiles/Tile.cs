@@ -58,7 +58,7 @@ public class Tile : MonoBehaviour
 
     public bool IsEmpty ()
     {
-        return m_Object == null;
+        return m_Object == null && m_Type != ETileType.Wall;
     }
 
     public TileCoordinates GetCoordinates ()
