@@ -187,7 +187,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            GameObject barrel = facingTile.GetBarrel ();
+            GameObject barrel = facingTile.GetTileObject ();
             if (barrel != null)
             {
                 barrel.transform.SetParent (transform, true);
@@ -199,7 +199,7 @@ public class PlayerController : MonoBehaviour
     private bool CanToggleGrab ()
     {
         Tile facingTile = GetFacingTile ();
-        return (m_Barrel != null && facingTile.IsEmpty ()) || (m_Barrel == null && facingTile.HasBarrel ());
+        return (m_Barrel != null && facingTile.IsEmpty ()) || (m_Barrel == null && facingTile.HasBin ());
     }
 
     private Tile GetFacingTile ()
@@ -209,8 +209,8 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 GetFacingTileCoordinates ()
     {
-        Vector2 currentTileCoordinates = transform.position;
-        Vector2 facingTileOffset = ms_NeighboorTiles[m_FacingDirection];
+        TileCoordinates currentTileCoordinates = transform.position;
+        TileCoordinates facingTileOffset = ms_NeighboorTiles[m_FacingDirection];
 
         return currentTileCoordinates + facingTileOffset;
     }
@@ -237,10 +237,10 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Vector2 currentTileCoordinates = transform.position;
-            Vector2 oldFacingTileOffset = ms_NeighboorTiles[m_FacingDirection];
-            Vector2 newFacingOffset = ms_NeighboorTiles[(EFacingDirection)newFacingDirection];
-            Vector2 passingTileOffset = oldFacingTileOffset + newFacingOffset;
+            TileCoordinates currentTileCoordinates = transform.position;
+            TileCoordinates oldFacingTileOffset = ms_NeighboorTiles[m_FacingDirection];
+            TileCoordinates newFacingOffset = ms_NeighboorTiles[(EFacingDirection)newFacingDirection];
+            TileCoordinates passingTileOffset = oldFacingTileOffset + newFacingOffset;
 
             return TileManagerProxy.Get ().GetTile (currentTileCoordinates + newFacingOffset).IsEmpty ()
                 && TileManagerProxy.Get ().GetTile (currentTileCoordinates + passingTileOffset).IsEmpty ();
@@ -260,11 +260,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private static Dictionary<EFacingDirection, Vector2> ms_NeighboorTiles = new Dictionary<EFacingDirection, Vector2> ()
+    private static Dictionary<EFacingDirection, TileCoordinates> ms_NeighboorTiles = new Dictionary<EFacingDirection, TileCoordinates> ()
     {
-        { EFacingDirection.Right, new Vector2(1, 0) },
-        { EFacingDirection.Left,  new Vector2(-1, 0) },
-        { EFacingDirection.Up,    new Vector2(0, 1) },
-        { EFacingDirection.Down,  new Vector2(0, -1) },
+        { EFacingDirection.Right, new TileCoordinates(1, 0) },
+        { EFacingDirection.Left,  new TileCoordinates(-1, 0) },
+        { EFacingDirection.Up,    new TileCoordinates(0, 1) },
+        { EFacingDirection.Down,  new TileCoordinates(0, -1) },
     };
 }

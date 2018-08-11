@@ -1,8 +1,16 @@
 ﻿
 using UnityEngine;
+using System.Collections.Generic;
 
 public class TileManager
 {
+    private Dictionary<TileCoordinates, Tile> m_Tiles;
+
+    public TileManager()
+    {
+        m_Tiles = new Dictionary<TileCoordinates, Tile> ();
+    }
+
     public Tile GetTile (int x, int y)
     {
         return ms_InvalidTile;
@@ -12,8 +20,6 @@ public class TileManager
     {
         return ms_InvalidTile;
     }
-
-    public static Tile ms_InvalidTile = new Tile();
 }
 
 public class TileManagerProxy : UniqueProxy<TileManager>

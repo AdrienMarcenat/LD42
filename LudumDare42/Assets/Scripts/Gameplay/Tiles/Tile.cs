@@ -6,34 +6,69 @@ public enum ETileType
     None,
 
     Normal,
-
-    Count,
+    Wall,
+    Acid,
+    Goal,
+    Start,
 }
 
-public class Tile
+public struct TileCoordinates
 {
-    private ETileType m_Type;
-    private GameObject m_Barrel;
+    public TileCoordinates(int x = 0, int y = 0)
+    {
+        this.x = x;
+        this.y = y;
+    }
+
+    public static TileCoordinates operator + (TileCoordinates t1, TileCoordinates t2)
+    {
+        TileCoordinates res = new TileCoordinates ();
+        res.x = t1.x + t2.x;
+        res.y = t1.y + t2.y;
+        return res;
+    }
+
+    public static implicit operator TileCoordinates (Vector3 vector)
+    {
+        TileCoordinates res = new TileCoordinates ();
+        res.x = (int)vector.x;
+        res.y = (int)vector.y;
+        return res;
+    }
+
+    public int x;
+    public int y;
+}
+
+public class Tile : MonoBehaviour
+{
+    [SerializeField]  private ETileType m_Type;
+    [SerializeField] private TileObject m_Object;
+    private TileCoordinates m_Coordinates;
     private bool m_HasBarrel;
-    private Vector2 m_Coordinates;
 
-    public bool HasBarrel()
+    public bool HasBin ()
     {
-        return m_Barrel != null;
+        return m_Object != null && m_Object.GetObjectType() == ETileObjectType.Bin;
     }
 
-    public GameObject GetBarrel ()
+    public TileObject GetTileObject ()
     {
-        return m_Barrel;
+        return m_Object;
     }
 
-    public bool IsEmpty()
+    public bool IsEmpty ()
     {
-        return m_Barrel == null;
+        return m_Object == null;
     }
 
-    public Vector2 GetCoordinates ()
+    public TileCoordinates GetCoordinates ()
     {
         return m_Coordinates;
+    }
+
+    public void SetTileObject(TileObject tileObject)
+    {
+        m_Object = tileObject;
     }
 }
