@@ -7,6 +7,7 @@ public class World : MonoBehaviour
     private GameEventManager m_GameEventManager;
     private InputManager m_InputManager;
     private LevelManager m_LevelManager;
+    private MapManager m_MapManager;
 
     private GameFlowHSM m_GameFlowHSM;
 
@@ -32,6 +33,8 @@ public class World : MonoBehaviour
             InputManagerProxy.Open (m_InputManager);
             m_LevelManager = new LevelManager ();
             LevelManagerProxy.Open (m_LevelManager);
+            m_MapManager = new MapManager();
+            MapManagerProxy.Open(m_MapManager);
 
             m_GameFlowHSM = new GameFlowHSM ();
         }
