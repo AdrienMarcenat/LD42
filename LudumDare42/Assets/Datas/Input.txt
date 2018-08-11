@@ -8,3 +8,4 @@ TurnLeft:Q
 TurnUp:Z
 TurnDown:S
 Undo:U
+Grab / Ungrab:E

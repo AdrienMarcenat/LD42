@@ -21,7 +21,7 @@ public class MoveCommand : Command
     public override void Execute (PlayerController actor) { actor.Move (m_XDir, m_YDir); }
     public override void Undo (PlayerController actor) { actor.Move (-m_XDir, -m_YDir); }
 
-    public MoveCommand(int xDir, int yDir)
+    public MoveCommand (int xDir, int yDir)
     {
         m_XDir = xDir;
         m_YDir = yDir;
@@ -46,13 +46,19 @@ public class TurnCommand : Command
     private int m_NewFacingDirection;
 }
 
-[RequireComponent (typeof (Collider2D))]
+public class ToggleGrabCommand : Command
+{
+    public override void Execute (PlayerController actor) { actor.ToggleGrab (); }
+    public override void Undo (PlayerController actor) { actor.ToggleGrab (); }
+}
+
 public class PlayerController : MonoBehaviour
 {
     private EFacingDirection m_FacingDirection;
     private bool m_IsHoldingSomething;
+    private GameObject m_Barrel;
     private Stack<Command> m_CommandStack;
-    
+
     void Awake ()
     {
         m_FacingDirection = EFacingDirection.Right;
@@ -66,18 +72,34 @@ public class PlayerController : MonoBehaviour
         this.UnregisterAsListener ("Player");
     }
 
-    private void AddMoveCommand(int XDir, int YDir)
+    private void AddMoveCommand (int xDir, int yDir)
     {
-        MoveCommand command = new MoveCommand (XDir, YDir);
-        command.Execute (this);
-        m_CommandStack.Push (command);
+        if (CanMoveTo (xDir, yDir))
+        {
+            MoveCommand command = new MoveCommand (xDir, yDir);
+            command.Execute (this);
+            m_CommandStack.Push (command);
+        }
     }
 
     private void AddTurnCommand (int newFacingDirection)
     {
-        TurnCommand command = new TurnCommand ((int)m_FacingDirection, newFacingDirection);
-        command.Execute (this);
-        m_CommandStack.Push (command);
+        if (CanTurn (newFacingDirection))
+        {
+            TurnCommand command = new TurnCommand ((int)m_FacingDirection, newFacingDirection);
+            command.Execute (this);
+            m_CommandStack.Push (command);
+        }
+    }
+
+    private void AddToggleGrabCommand ()
+    {
+        if (CanToggleGrab ())
+        {
+            ToggleGrabCommand command = new ToggleGrabCommand ();
+            command.Execute (this);
+            m_CommandStack.Push (command);
+        }
     }
 
     private void UndoCommand ()
@@ -121,7 +143,10 @@ public class PlayerController : MonoBehaviour
                     AddTurnCommand ((int)EFacingDirection.Down);
                     break;
                 case "Undo":
-                    UndoCommand();
+                    UndoCommand ();
+                    break;
+                case "Grab / Ungrab":
+                    AddToggleGrabCommand ();
                     break;
                 default:
                     break;
@@ -132,6 +157,62 @@ public class PlayerController : MonoBehaviour
     public void Move (int xDir, int yDir)
     {
         transform.position = new Vector3 (transform.position.x + xDir, transform.position.y + yDir, transform.position.z);
+    }
+
+    private bool CanMoveTo (int xDir, int yDir)
+    {
+        Tile nextTruckTile = TileManagerProxy.Get ().GetTile ((int)transform.position.x + xDir, (int)transform.position.y + yDir);
+        if (m_Barrel == null)
+        {
+            return nextTruckTile.IsEmpty ();
+        }
+        else
+        {
+            Vector2 facingCoordinate = GetFacingTileCoordinates ();
+            Tile nextBarrelTile = TileManagerProxy.Get ().GetTile ((int)facingCoordinate.x + xDir, (int)facingCoordinate.y + yDir);
+            return nextTruckTile.IsEmpty () && nextBarrelTile.IsEmpty ();
+        }
+    }
+
+    public void ToggleGrab ()
+    {
+        Tile facingTile = GetFacingTile ();
+        if (m_Barrel != null)
+        {
+            if (facingTile.IsEmpty ())
+            {
+                m_Barrel.transform.SetParent (null, true);
+                m_Barrel = null;
+            }
+        }
+        else
+        {
+            GameObject barrel = facingTile.GetBarrel ();
+            if (barrel != null)
+            {
+                barrel.transform.SetParent (transform, true);
+                m_Barrel = barrel;
+            }
+        }
+    }
+
+    private bool CanToggleGrab ()
+    {
+        Tile facingTile = GetFacingTile ();
+        return (m_Barrel != null && facingTile.IsEmpty ()) || (m_Barrel == null && facingTile.HasBarrel ());
+    }
+
+    private Tile GetFacingTile ()
+    {
+        return TileManagerProxy.Get ().GetTile (GetFacingTileCoordinates ());
+    }
+
+    private Vector2 GetFacingTileCoordinates ()
+    {
+        Vector2 currentTileCoordinates = transform.position;
+        Vector2 facingTileOffset = ms_NeighboorTiles[m_FacingDirection];
+
+        return currentTileCoordinates + facingTileOffset;
     }
 
     public void Turn (int directionToFace)
@@ -148,10 +229,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D (Collision2D other)
+    private bool CanTurn (int newFacingDirection)
     {
-        if (other.gameObject.tag == "Obstacle")
+        if (m_Barrel == null)
         {
+            return true;
+        }
+        else
+        {
+            Vector2 currentTileCoordinates = transform.position;
+            Vector2 oldFacingTileOffset = ms_NeighboorTiles[m_FacingDirection];
+            Vector2 newFacingOffset = ms_NeighboorTiles[(EFacingDirection)newFacingDirection];
+            Vector2 passingTileOffset = oldFacingTileOffset + newFacingOffset;
+
+            return TileManagerProxy.Get ().GetTile (currentTileCoordinates + newFacingOffset).IsEmpty ()
+                && TileManagerProxy.Get ().GetTile (currentTileCoordinates + passingTileOffset).IsEmpty ();
         }
     }
 
@@ -167,4 +259,12 @@ public class PlayerController : MonoBehaviour
             return res;
         }
     }
+
+    private static Dictionary<EFacingDirection, Vector2> ms_NeighboorTiles = new Dictionary<EFacingDirection, Vector2> ()
+    {
+        { EFacingDirection.Right, new Vector2(1, 0) },
+        { EFacingDirection.Left,  new Vector2(-1, 0) },
+        { EFacingDirection.Up,    new Vector2(0, 1) },
+        { EFacingDirection.Down,  new Vector2(0, -1) },
+    };
 }
