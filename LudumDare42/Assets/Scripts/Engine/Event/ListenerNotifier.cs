@@ -37,6 +37,9 @@ public class ListenerNotifier
                 return listener.GetTag () == tag && listener.GetObjectToNotify () == objectToNotify;
             }
         );
-        m_Listeners.RemoveAt (indexToRemove);
+        if(indexToRemove < m_Listeners.Count && indexToRemove >= 0)
+        {
+            m_Listeners.RemoveAt (indexToRemove);
+        }
     }
 }

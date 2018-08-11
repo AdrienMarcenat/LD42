@@ -475,8 +475,6 @@ MonoBehaviour:
     type: 2}
   m_PlayerPrefab: {fileID: 1295975795656072, guid: 437f931776d897b42a9524dbf1aeb07b,
     type: 2}
-  m_TileObjectPrefab: {fileID: 1127412601011514, guid: b8d3eb3ab6e2fd24889ea23110d1c847,
-    type: 2}
 --- !u!4 &949120279
 Transform:
   m_ObjectHideFlags: 0

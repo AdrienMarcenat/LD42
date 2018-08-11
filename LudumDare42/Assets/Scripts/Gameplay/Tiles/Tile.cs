@@ -8,7 +8,6 @@ public enum ETileType
     Normal,
     Wall,
     Acid,
-    Goal,
     Start,
 }
 
@@ -26,6 +25,16 @@ public struct TileCoordinates
         res.x = t1.x + t2.x;
         res.y = t1.y + t2.y;
         return res;
+    }
+
+    public static bool operator == (TileCoordinates t1, TileCoordinates t2)
+    {
+        return t1.x == t2.x && t1.y == t2.y;
+    }
+
+    public static bool operator != (TileCoordinates t1, TileCoordinates t2)
+    {
+        return t1.x != t2.x || t1.y != t2.y;
     }
 
     public static implicit operator TileCoordinates (Vector3 vector)
@@ -79,5 +88,9 @@ public class Tile : MonoBehaviour
     public void SetTileObject(TileObject tileObject)
     {
         m_Object = tileObject;
+        if (m_Object != null)
+        {
+            m_Object.SetCoordinates (m_Coordinates);
+        }
     }
 }

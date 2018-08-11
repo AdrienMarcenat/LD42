@@ -1,4 +1,5 @@
 ﻿
+using System;
 using UnityEngine;
 
 public static class Extension
@@ -41,5 +42,16 @@ public static class Extension
     public static void DebugLog (this System.Object caller, System.Object message)
     {
         LoggerProxy.Get ().Log (message);
+    }
+
+    public static T[] SubArray<T> (this T[] data, int index, int length = -1)
+    {
+        if (length == -1)
+        {
+            length = data.Length - index;
+        }
+        T[] result = new T[length];
+        Array.Copy (data, index, result, 0, length);
+        return result;
     }
 }

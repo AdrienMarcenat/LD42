@@ -182,6 +182,7 @@ public class PlayerController : MonoBehaviour
         {
             if (facingTile.IsEmpty ())
             {
+                new BinEvent ((Bin)m_Bin).Push ();
                 facingTile.SetTileObject (m_Bin);
                 m_Bin.transform.SetParent (null, true);
                 m_Bin = null;

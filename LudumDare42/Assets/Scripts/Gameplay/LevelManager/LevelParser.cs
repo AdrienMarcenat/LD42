@@ -8,14 +8,12 @@ public class LevelParser : MonoBehaviour
 {
     [SerializeField] private GameObject m_TilePrefab;
     [SerializeField] private GameObject m_PlayerPrefab;
-    [SerializeField] private GameObject m_TileObjectPrefab;
 
     private static Dictionary<string, ETileType> ms_CharToTileType = new Dictionary<string, ETileType> ()
     {
         { "X", ETileType.None },
         { "N", ETileType.Normal },
         { "W", ETileType.Wall },
-        { "G", ETileType.Goal },
         { "S", ETileType.Start },
         { "A", ETileType.Acid },
     };
@@ -48,6 +46,7 @@ public class LevelParser : MonoBehaviour
                 ETileType tileType = ms_CharToTileType[words[0]];
                 if (tileType == ETileType.None)
                 {
+                    x++;
                     continue;
                 }
                 if (tileType == ETileType.Start)
@@ -66,13 +65,14 @@ public class LevelParser : MonoBehaviour
                 if (words.Length > 1 && tileType != ETileType.Start)
                 {
                     ETileObjectType tileObjectType = (ETileObjectType)Enum.Parse (typeof (ETileObjectType), (String)words.GetValue (1), true);
-                    int objectNumber = Int32.Parse ((String)words.GetValue (2));
-                    GameObject tileObjectGameObject = GameObject.Instantiate (m_TileObjectPrefab);
+                    GameObject tileObjectGameObject = GameObject.Instantiate (RessourceManager.LoadPrefab("TileObject_" + words[1]));
                     tileObjectGameObject.transform.position = new Vector3 (x, y, 0);
-                    TileObject tileObject = tileObjectGameObject.AddComponent<TileObject> ();
-                    tileObject.SetNumber (objectNumber);
-                    tileObject.SetType (tileObjectType);
-                    tile.SetTileObject (tileObject);
+                    TileObject tileObject = tileObjectGameObject.GetComponent<TileObject> ();
+                    tileObject.Init (tileObjectType, x, y, words.SubArray(2, -1));
+                    if (tileObject.CanBeGrabed ())
+                    {
+                        tile.SetTileObject (tileObject);
+                    }
                 }
 
                 x++;
