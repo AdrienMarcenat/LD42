@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum EFacingDirection
@@ -12,11 +13,24 @@ public enum EFacingDirection
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private float m_MoveSpeed = 50f;
+    [SerializeField] private float m_TurnSpeed = 250f;
+
     private EFacingDirection m_FacingDirection;
     private TileObject m_Bin;
+    private bool m_IsMoving = false;
+    private bool m_IsTurning = false;
+    private float m_TurnAmount = 0f;
+    private Vector3 m_TargetPos;
+    private Vector3 m_OldAngle;
+    private Vector3 m_TargetAngle;
+    private Animator m_Animator;
 
     void Awake ()
     {
+        m_TargetPos = transform.position;
+        m_OldAngle = transform.rotation.eulerAngles;
+        m_Animator = GetComponent<Animator> ();
         this.RegisterAsListener ("Player", typeof (PlayerInputGameEvent));
     }
 
@@ -52,7 +66,7 @@ public class PlayerController : MonoBehaviour
         {
             ToggleGrabCommand command = new ToggleGrabCommand (gameObject);
             command.Execute ();
-            CommandStackProxy.Get().PushCommand (command);
+            CommandStackProxy.Get ().PushCommand (command);
         }
     }
 
@@ -93,12 +107,42 @@ public class PlayerController : MonoBehaviour
 
     public void Move (int xDir, int yDir)
     {
-        transform.position = new Vector3 (transform.position.x + xDir, transform.position.y + yDir, transform.position.z);
+        m_TargetPos = new Vector3 (transform.position.x + xDir.ToWorldUnit (), transform.position.y + yDir.ToWorldUnit (), transform.position.z);
+        StartCoroutine (MoveRoutine ());
+    }
+
+    public void MoveInstant (int xDir, int yDir)
+    {
+        StopMovement ();
+        m_TargetPos = new Vector3 (transform.position.x + xDir.ToWorldUnit (), transform.position.y + yDir.ToWorldUnit (), transform.position.z);
+        transform.position = m_TargetPos;
+    }
+
+    IEnumerator MoveRoutine ()
+    {
+        SetIsMoving (true);
+        while (transform.position != m_TargetPos)
+        {
+            transform.position = Vector3.MoveTowards (transform.position, m_TargetPos, Time.deltaTime * m_MoveSpeed);
+            yield return null;
+        }
+        SetIsMoving (false);
+    }
+
+    private void SetIsMoving (bool isMoving)
+    {
+        m_IsMoving = isMoving;
+        m_Animator.SetBool ("IsMoving", m_IsMoving);
     }
 
     private bool CanMoveTo (int xDir, int yDir)
     {
-        Tile nextTruckTile = TileManagerProxy.Get ().GetTile ((int)transform.position.x + xDir, (int)transform.position.y + yDir);
+        if (m_IsMoving || m_IsTurning)
+        {
+            return false;
+        }
+
+        Tile nextTruckTile = TileManagerProxy.Get ().GetTile (((int)transform.position.x).ToTileUnit () + xDir, ((int)transform.position.y).ToTileUnit () + yDir);
         if (m_Bin == null)
         {
             return nextTruckTile != null && nextTruckTile.IsEmpty ();
@@ -106,7 +150,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             TileCoordinates facingCoordinate = GetFacingTileCoordinates ();
-            Tile nextBarrelTile = TileManagerProxy.Get ().GetTile (new TileCoordinates(facingCoordinate.x + xDir, facingCoordinate.y + yDir));
+            Tile nextBarrelTile = TileManagerProxy.Get ().GetTile (new TileCoordinates (facingCoordinate.x + xDir, facingCoordinate.y + yDir));
             return nextBarrelTile != null && nextTruckTile != null && nextTruckTile.IsEmpty () && nextBarrelTile.IsEmpty ();
         }
     }
@@ -142,6 +186,10 @@ public class PlayerController : MonoBehaviour
 
     private bool CanToggleGrab ()
     {
+        if (m_IsMoving || m_IsTurning)
+        {
+            return false;
+        }
         Tile facingTile = GetFacingTile ();
         return facingTile != null && ((m_Bin != null && facingTile.IsEmpty ()) || (m_Bin == null && facingTile.HasBin ()));
     }
@@ -153,7 +201,7 @@ public class PlayerController : MonoBehaviour
 
     private TileCoordinates GetFacingTileCoordinates ()
     {
-        TileCoordinates currentTileCoordinates = transform.position;
+        TileCoordinates currentTileCoordinates = new TileCoordinates (((int)transform.position.x).ToTileUnit (), ((int)transform.position.y).ToTileUnit ());
         TileCoordinates facingTileOffset = ms_NeighboorTiles[m_FacingDirection];
 
         return currentTileCoordinates + facingTileOffset;
@@ -161,27 +209,77 @@ public class PlayerController : MonoBehaviour
 
     public void Turn (bool isTurningRight)
     {
+        TurnInternal (isTurningRight);
+        StartCoroutine (TurnRoutine (isTurningRight ? -1 : 1));
+    }
+
+    public void TurnInstant (bool isTurningRight)
+    {
+        StopMovement ();
+        TurnInternal (isTurningRight);
+        transform.rotation = Quaternion.Euler (m_TargetAngle);
+    }
+
+    private void TurnInternal (bool isTurningRight)
+    {
+        m_OldAngle = transform.rotation.eulerAngles;
+        int direction = isTurningRight ? -1 : 1;
+        m_FacingDirection = (EFacingDirection)Modulo ((int)m_FacingDirection + direction, 4);
         if (isTurningRight)
         {
-            transform.Rotate (Vector3.forward, -90);
+            m_TargetAngle = transform.rotation.eulerAngles + new Vector3 (0, 0, -90);
         }
         else
         {
-            transform.Rotate (Vector3.forward, 90);
+            m_TargetAngle = transform.rotation.eulerAngles + new Vector3 (0, 0, 90);
         }
-        int direction = isTurningRight ? -1 : 1;
-        m_FacingDirection = (EFacingDirection)Modulo ((int)m_FacingDirection + direction, 4);
+    }
+
+    private void SetIsTurning (bool isMoving)
+    {
+        m_IsTurning = isMoving;
+    }
+
+    IEnumerator TurnRoutine (int direction)
+    {
+        m_TurnAmount = 0;
+        SetIsTurning (true);
+        while (m_TurnAmount != 90)
+        {
+            m_TurnAmount = Mathf.Clamp (m_TurnAmount + Time.deltaTime * m_TurnSpeed, 0f, 90f);
+            transform.rotation = Quaternion.Euler (m_OldAngle + new Vector3 (0, 0, direction * m_TurnAmount));
+            yield return null;
+        }
+        SetIsTurning (false);
+    }
+
+    private void StopMovement ()
+    {
+        if (m_IsTurning || m_IsMoving)
+        {
+            StopAllCoroutines ();
+            SetIsMoving (false);
+            SetIsTurning (false);
+            transform.position = m_TargetPos;
+            transform.rotation = Quaternion.Euler (m_TargetAngle);
+        }
     }
 
     private bool CanTurn (int newFacingDirection)
     {
+        if (m_IsMoving || m_IsTurning)
+        {
+            return false;
+        }
+
         if (m_Bin == null)
         {
             return true;
         }
+
         else
         {
-            TileCoordinates currentTileCoordinates = transform.position;
+            TileCoordinates currentTileCoordinates = new TileCoordinates (((int)transform.position.x).ToTileUnit (), ((int)transform.position.y).ToTileUnit ());
             TileCoordinates oldFacingTileOffset = ms_NeighboorTiles[m_FacingDirection];
             TileCoordinates newFacingOffset = ms_NeighboorTiles[(EFacingDirection)newFacingDirection];
             TileCoordinates passingTileOffset = oldFacingTileOffset + newFacingOffset;

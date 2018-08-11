@@ -4,7 +4,7 @@ using UnityEngine;
 public class MoveCommand : Command
 {
     public override void Execute () { m_Actor.GetComponent<PlayerController> ().Move (m_XDir, m_YDir); }
-    public override void Undo () { m_Actor.GetComponent<PlayerController> ().Move (-m_XDir, -m_YDir); }
+    public override void Undo () { m_Actor.GetComponent<PlayerController> ().MoveInstant (-m_XDir, -m_YDir); }
 
     public MoveCommand (GameObject actor, int xDir, int yDir) : base (actor)
     {
@@ -19,7 +19,7 @@ public class MoveCommand : Command
 public class TurnCommand : Command
 {
     public override void Execute () { m_Actor.GetComponent<PlayerController> ().Turn (m_IsTurningRight); }
-    public override void Undo () { m_Actor.GetComponent<PlayerController> ().Turn (!m_IsTurningRight); }
+    public override void Undo () { m_Actor.GetComponent<PlayerController> ().TurnInstant (!m_IsTurningRight); }
 
     public TurnCommand (GameObject actor, bool isTurningRight) : base (actor)
     {

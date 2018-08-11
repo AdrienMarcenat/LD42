@@ -54,4 +54,14 @@ public static class Extension
         Array.Copy (data, index, result, 0, length);
         return result;
     }
+
+    public static int ToWorldUnit(this int unit)
+    {
+        return unit * 48 / 2;
+    }
+
+    public static int ToTileUnit (this int unit)
+    {
+        return (int)(unit * 2 / 48);
+    }
 }

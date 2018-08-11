@@ -47,7 +47,7 @@ public static class LevelParser
                     playerFacingDirection = (EFacingDirection)Enum.Parse (typeof (EFacingDirection), (String)words.GetValue (1), true);
                 }
                 GameObject tileGameObject = GameObject.Instantiate (RessourceManager.LoadPrefab ("Tile"));
-                tileGameObject.transform.position = new Vector3 (x, y, 0);
+                tileGameObject.transform.position = new Vector3 (x.ToWorldUnit(), y.ToWorldUnit(), 0);
                 Tile tile = tileGameObject.AddComponent<Tile> ();
                 tile.SetCoordinates (new TileCoordinates (x, y));
                 tile.SetType (tileType);
@@ -57,7 +57,7 @@ public static class LevelParser
                 {
                     ETileObjectType tileObjectType = (ETileObjectType)Enum.Parse (typeof (ETileObjectType), (String)words.GetValue (1), true);
                     GameObject tileObjectGameObject = GameObject.Instantiate (RessourceManager.LoadPrefab("TileObject_" + words[1]));
-                    tileObjectGameObject.transform.position = new Vector3 (x, y, 0);
+                    tileObjectGameObject.transform.position = new Vector3 (x.ToWorldUnit (), y.ToWorldUnit (), 0);
                     TileObject tileObject = tileObjectGameObject.GetComponent<TileObject> ();
                     tileObject.Init (tileObjectType, x, y, words.SubArray(2, -1));
                     if (tileObject.CanBeGrabed ())
@@ -73,7 +73,7 @@ public static class LevelParser
         
         {
             GameObject playerObject = GameObject.Instantiate (RessourceManager.LoadPrefab ("Player"));
-            playerObject.transform.position = new Vector3 (xPlayer, yPlayer, 0);
+            playerObject.transform.position = new Vector3 (xPlayer.ToWorldUnit(), yPlayer.ToWorldUnit(), 0);
             PlayerController controller = playerObject.AddComponent<PlayerController> ();
             controller.SetFacingDirection (playerFacingDirection);
         }
