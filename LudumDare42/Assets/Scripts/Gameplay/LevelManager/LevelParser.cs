@@ -1,59 +1,70 @@
-﻿using System.Collections;
+﻿
 using System;
 using System.IO;
+using UnityEngine;
 
-public enum EObjectType { Tile, Truck, Bin, Goal };
+public enum EObjectType { Tile, Player, TileObject };
 
-public class LevelParser
+public class LevelParser : MonoBehaviour
 {
-    protected void ReadFile(string path, string filename)
+    [SerializeField] private GameObject m_TilePrefab;
+    [SerializeField] private GameObject m_PlayerPrefab;
+    [SerializeField] private GameObject m_TileObjectPrefab;
+
+    private void Awake()
     {
-        string line;
+        TileManagerProxy.Get ().Reset ();
+        ReadFile ("Datas/Level1.txt");
+    }
 
-        // Read the file and display it line by line.  
-        System.IO.StreamReader file =
-            new System.IO.StreamReader(AppendPathSeparator(path) + filename);
-        while ((line = file.ReadLine()) != null)
+    public void ReadFile (string filename)
+    {
+#if UNITY_EDITOR
+        filename = "Assets/" + filename;
+#endif
+        string[] lines = File.ReadAllLines (filename);
+        foreach (string line in lines)
         {
-            string[] words = line.Split(' ');
+            string[] words = line.Split (' ');
 
-            EObjectType EObjectType = (EObjectType)Enum.Parse(typeof(EObjectType), (String)words.GetValue(0), true);
-            int x = Int32.Parse((String)words.GetValue(1));
-            int y = Int32.Parse((String)words.GetValue(2));
+            EObjectType EObjectType = (EObjectType)Enum.Parse (typeof (EObjectType), (String)words.GetValue (0), true);
+            int x = Int32.Parse ((String)words.GetValue (1));
+            int y = Int32.Parse ((String)words.GetValue (2));
 
             switch (EObjectType)
             {
                 case EObjectType.Tile:
-                    ETileType ETileType = (ETileType)Enum.Parse(typeof(ETileType), (String)words.GetValue(3), true);
-                    Tile tile = new Tile(x, y, ETileType);
-                    TileManagerProxy.Get().AddTile(tile);
-                    break;
-                case EObjectType.Truck:
-                    EFacingDirection EFacingDirection = (EFacingDirection)Enum.Parse(typeof(EFacingDirection), (String)words.GetValue(3), true);
-                    Truck truck = new Truck(x, y, EFacingDirection);
-                    TileManagerProxy.Get().SetTruck(truck);
-                    break;
-                case EObjectType.Goal:
-                    int order = Int32.Parse((String)words.GetValue(3));
-                    Goal goal = new Goal(x, y, order);
-                    TileManagerProxy.Get().AddGoal(goal);
-                    break;
-                case EObjectType.Bin:
-                    int orderBin = Int32.Parse((String)words.GetValue(3));
-                    Bin bin = new Bin(x, y, orderBin);
-                    TileManagerProxy.Get().AddBin(bin);
-                    break;
+                {
+                    ETileType tileType = (ETileType)Enum.Parse (typeof (ETileType), (String)words.GetValue (3), true);
+                    GameObject tileObject = GameObject.Instantiate (m_TilePrefab);
+                    tileObject.transform.position = new Vector3 (x, y, 0);
+                    Tile tile = tileObject.AddComponent<Tile> ();
+                    tile.SetCoordinates (new TileCoordinates (x, y));
+                    tile.SetType (tileType);
+                    TileManagerProxy.Get ().AddTile (tile);
+                }
+                break;
+                case EObjectType.Player:
+                {
+                    EFacingDirection facingDirection = (EFacingDirection)Enum.Parse (typeof (EFacingDirection), (String)words.GetValue (3), true);
+                    GameObject playerObject = GameObject.Instantiate (m_PlayerPrefab);
+                    playerObject.transform.position = new Vector3 (x, y, 0);
+                    PlayerController controller = playerObject.AddComponent<PlayerController> ();
+                    controller.SetFacingDirection (facingDirection);
+                }
+                break;
+                case EObjectType.TileObject:
+                {
+                    ETileObjectType tileObjectType = (ETileObjectType)Enum.Parse (typeof (ETileObjectType), (String)words.GetValue (3), true);
+                    int number = Int32.Parse ((String)words.GetValue (4));
+                    GameObject tileGameObject = GameObject.Instantiate (m_TileObjectPrefab);
+                    tileGameObject.transform.position = new Vector3 (x, y, 0);
+                    TileObject tileObject = tileGameObject.AddComponent<TileObject> ();
+                    tileObject.SetNumber (number);
+                    tileObject.SetType (tileObjectType);
+                }
+                break;
             }
-        } 
-
-        file.Close();
-    }
-
-    public string AppendPathSeparator(string filepath)
-    {
-        if (!filepath.EndsWith(@"\"))
-            filepath += @"\";
-
-        return filepath;
+        }
     }
 }

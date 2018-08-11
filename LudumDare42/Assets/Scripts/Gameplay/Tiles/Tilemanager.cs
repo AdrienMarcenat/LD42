@@ -7,24 +7,31 @@ public class TileManager
 {
     private Dictionary<TileCoordinates, Tile> m_Tiles;
 
-    public TileManager()
+    public TileManager ()
     {
         m_Tiles = new Dictionary<TileCoordinates, Tile> ();
     }
 
     public Tile GetTile (int x, int y)
     {
-        return null;
+        return GetTile (new TileCoordinates (x, y));
     }
 
-    public Tile GetTile (Vector2 coordinates)
+    public Tile GetTile (TileCoordinates coordinates)
     {
-        return null;
+        Tile tile = null;
+        m_Tiles.TryGetValue (coordinates, out tile);
+        return tile;
     }
 
     public void AddTile (Tile tile)
     {
-        this.m_Tiles.Add (tile.GetCoordinates(), tile);
+        this.m_Tiles.Add (tile.GetCoordinates (), tile);
+    }
+
+    public void Reset ()
+    {
+        m_Tiles.Clear ();
     }
 }
 

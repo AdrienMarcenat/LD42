@@ -42,10 +42,9 @@ public struct TileCoordinates
 
 public class Tile : MonoBehaviour
 {
-    [SerializeField]  private ETileType m_Type;
+    [SerializeField] private ETileType m_Type;
     [SerializeField] private TileObject m_Object;
     private TileCoordinates m_Coordinates;
-    private bool m_HasBarrel;
 
     public bool HasBin ()
     {
@@ -65,6 +64,16 @@ public class Tile : MonoBehaviour
     public TileCoordinates GetCoordinates ()
     {
         return m_Coordinates;
+    }
+
+    public void SetCoordinates (TileCoordinates coordinates)
+    {
+        m_Coordinates = coordinates;
+    }
+
+    public void SetType (ETileType type)
+    {
+        m_Type = type;
     }
 
     public void SetTileObject(TileObject tileObject)

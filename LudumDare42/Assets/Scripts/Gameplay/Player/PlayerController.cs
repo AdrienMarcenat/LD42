@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour
 {
     private EFacingDirection m_FacingDirection;
     private bool m_IsHoldingSomething;
-    private GameObject m_Barrel;
+    private TileObject m_Bin;
     private Stack<Command> m_CommandStack;
 
     void Awake ()
@@ -162,14 +162,14 @@ public class PlayerController : MonoBehaviour
     private bool CanMoveTo (int xDir, int yDir)
     {
         Tile nextTruckTile = TileManagerProxy.Get ().GetTile ((int)transform.position.x + xDir, (int)transform.position.y + yDir);
-        if (m_Barrel == null)
+        if (m_Bin == null)
         {
             return nextTruckTile.IsEmpty ();
         }
         else
         {
-            Vector2 facingCoordinate = GetFacingTileCoordinates ();
-            Tile nextBarrelTile = TileManagerProxy.Get ().GetTile ((int)facingCoordinate.x + xDir, (int)facingCoordinate.y + yDir);
+            TileCoordinates facingCoordinate = GetFacingTileCoordinates ();
+            Tile nextBarrelTile = TileManagerProxy.Get ().GetTile (facingCoordinate);
             return nextTruckTile.IsEmpty () && nextBarrelTile.IsEmpty ();
         }
     }
@@ -177,21 +177,21 @@ public class PlayerController : MonoBehaviour
     public void ToggleGrab ()
     {
         Tile facingTile = GetFacingTile ();
-        if (m_Barrel != null)
+        if (m_Bin != null)
         {
             if (facingTile.IsEmpty ())
             {
-                m_Barrel.transform.SetParent (null, true);
-                m_Barrel = null;
+                m_Bin.transform.SetParent (null, true);
+                m_Bin = null;
             }
         }
         else
         {
-            GameObject barrel = facingTile.GetTileObject ();
-            if (barrel != null)
+            TileObject bin = facingTile.GetTileObject ();
+            if (bin != null && bin.GetObjectType() == ETileObjectType.Bin)
             {
-                barrel.transform.SetParent (transform, true);
-                m_Barrel = barrel;
+                bin.transform.SetParent (transform, true);
+                m_Bin = bin;
             }
         }
     }
@@ -199,7 +199,7 @@ public class PlayerController : MonoBehaviour
     private bool CanToggleGrab ()
     {
         Tile facingTile = GetFacingTile ();
-        return (m_Barrel != null && facingTile.IsEmpty ()) || (m_Barrel == null && facingTile.HasBin ());
+        return (m_Bin != null && facingTile.IsEmpty ()) || (m_Bin == null && facingTile.HasBin ());
     }
 
     private Tile GetFacingTile ()
@@ -207,7 +207,7 @@ public class PlayerController : MonoBehaviour
         return TileManagerProxy.Get ().GetTile (GetFacingTileCoordinates ());
     }
 
-    private Vector2 GetFacingTileCoordinates ()
+    private TileCoordinates GetFacingTileCoordinates ()
     {
         TileCoordinates currentTileCoordinates = transform.position;
         TileCoordinates facingTileOffset = ms_NeighboorTiles[m_FacingDirection];
@@ -231,7 +231,7 @@ public class PlayerController : MonoBehaviour
 
     private bool CanTurn (int newFacingDirection)
     {
-        if (m_Barrel == null)
+        if (m_Bin == null)
         {
             return true;
         }
@@ -245,6 +245,11 @@ public class PlayerController : MonoBehaviour
             return TileManagerProxy.Get ().GetTile (currentTileCoordinates + newFacingOffset).IsEmpty ()
                 && TileManagerProxy.Get ().GetTile (currentTileCoordinates + passingTileOffset).IsEmpty ();
         }
+    }
+
+    public void SetFacingDirection (EFacingDirection newFacingOrientation)
+    {
+        m_FacingDirection = newFacingOrientation;
     }
 
     private int Modulo (int a, int b)
