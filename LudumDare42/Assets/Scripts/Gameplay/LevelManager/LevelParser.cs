@@ -1,16 +1,13 @@
 ﻿using System.Collections;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 using System;
 using System.IO;
 
+public enum EObjectType { Tile, Truck, Bin, Goal };
 
 public class LevelParser
 {
-
     protected void ReadFile(string path, string filename)
     {
-
         string line;
 
         // Read the file and display it line by line.  
@@ -20,31 +17,31 @@ public class LevelParser
         {
             string[] words = line.Split(' ');
 
-            ObjectType objectType = (ObjectType)Enum.Parse(typeof(ObjectType), (String)words.GetValue(0), true);
+            EObjectType EObjectType = (EObjectType)Enum.Parse(typeof(EObjectType), (String)words.GetValue(0), true);
             int x = Int32.Parse((String)words.GetValue(1));
             int y = Int32.Parse((String)words.GetValue(2));
 
-            switch (objectType)
+            switch (EObjectType)
             {
-                case ObjectType.Tile:
-                    TileType tileType = (TileType)Enum.Parse(typeof(TileType), (String)words.GetValue(3), true);
-                    Tile tile = new Tile(x, y, tileType);
-                    MapManagerProxy.Get().AddTile(tile);
+                case EObjectType.Tile:
+                    ETileType ETileType = (ETileType)Enum.Parse(typeof(ETileType), (String)words.GetValue(3), true);
+                    Tile tile = new Tile(x, y, ETileType);
+                    TileManagerProxy.Get().AddTile(tile);
                     break;
-                case ObjectType.Truck:
-                    Orientation orientation = (Orientation)Enum.Parse(typeof(Orientation), (String)words.GetValue(3), true);
-                    Truck truck = new Truck(x, y, orientation);
-                    MapManagerProxy.Get().SetTruck(truck);
+                case EObjectType.Truck:
+                    EFacingDirection EFacingDirection = (EFacingDirection)Enum.Parse(typeof(EFacingDirection), (String)words.GetValue(3), true);
+                    Truck truck = new Truck(x, y, EFacingDirection);
+                    TileManagerProxy.Get().SetTruck(truck);
                     break;
-                case ObjectType.Goal:
+                case EObjectType.Goal:
                     int order = Int32.Parse((String)words.GetValue(3));
                     Goal goal = new Goal(x, y, order);
-                    MapManagerProxy.Get().AddGoal(goal);
+                    TileManagerProxy.Get().AddGoal(goal);
                     break;
-                case ObjectType.Bin:
+                case EObjectType.Bin:
                     int orderBin = Int32.Parse((String)words.GetValue(3));
                     Bin bin = new Bin(x, y, orderBin);
-                    MapManagerProxy.Get().AddBin(bin);
+                    TileManagerProxy.Get().AddBin(bin);
                     break;
             }
         } 

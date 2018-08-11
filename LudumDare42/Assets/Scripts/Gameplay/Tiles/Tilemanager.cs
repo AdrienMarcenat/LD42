@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+
 public class TileManager
 {
     private Dictionary<TileCoordinates, Tile> m_Tiles;
@@ -13,12 +14,17 @@ public class TileManager
 
     public Tile GetTile (int x, int y)
     {
-        return ms_InvalidTile;
+        return null;
     }
 
     public Tile GetTile (Vector2 coordinates)
     {
-        return ms_InvalidTile;
+        return null;
+    }
+
+    public void AddTile (Tile tile)
+    {
+        this.m_Tiles.Add (tile.GetCoordinates(), tile);
     }
 }
 
