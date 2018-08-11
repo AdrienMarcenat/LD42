@@ -1,3 +1,4 @@
 ﻿Tile 5 6 Wall
 Tile 1 2 Goal
 Player 0 0 Up
+TileObject -1 -2 Bin 4

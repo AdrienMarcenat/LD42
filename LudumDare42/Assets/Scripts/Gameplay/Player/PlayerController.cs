@@ -55,14 +55,11 @@ public class ToggleGrabCommand : Command
 public class PlayerController : MonoBehaviour
 {
     private EFacingDirection m_FacingDirection;
-    private bool m_IsHoldingSomething;
     private TileObject m_Bin;
     private Stack<Command> m_CommandStack;
 
     void Awake ()
     {
-        m_FacingDirection = EFacingDirection.Right;
-        m_IsHoldingSomething = false;
         m_CommandStack = new Stack<Command> ();
         this.RegisterAsListener ("Player", typeof (PlayerInputGameEvent));
     }
@@ -164,19 +161,23 @@ public class PlayerController : MonoBehaviour
         Tile nextTruckTile = TileManagerProxy.Get ().GetTile ((int)transform.position.x + xDir, (int)transform.position.y + yDir);
         if (m_Bin == null)
         {
-            return nextTruckTile.IsEmpty ();
+            return nextTruckTile != null && nextTruckTile.IsEmpty ();
         }
         else
         {
             TileCoordinates facingCoordinate = GetFacingTileCoordinates ();
             Tile nextBarrelTile = TileManagerProxy.Get ().GetTile (facingCoordinate);
-            return nextTruckTile.IsEmpty () && nextBarrelTile.IsEmpty ();
+            return nextBarrelTile != null && nextTruckTile != null && nextTruckTile.IsEmpty () && nextBarrelTile.IsEmpty ();
         }
     }
 
     public void ToggleGrab ()
     {
         Tile facingTile = GetFacingTile ();
+        if (facingTile == null)
+        {
+            return;
+        }
         if (m_Bin != null)
         {
             if (facingTile.IsEmpty ())
@@ -188,7 +189,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             TileObject bin = facingTile.GetTileObject ();
-            if (bin != null && bin.GetObjectType() == ETileObjectType.Bin)
+            if (bin != null && bin.GetObjectType () == ETileObjectType.Bin)
             {
                 bin.transform.SetParent (transform, true);
                 m_Bin = bin;
@@ -199,7 +200,7 @@ public class PlayerController : MonoBehaviour
     private bool CanToggleGrab ()
     {
         Tile facingTile = GetFacingTile ();
-        return (m_Bin != null && facingTile.IsEmpty ()) || (m_Bin == null && facingTile.HasBin ());
+        return facingTile != null && ((m_Bin != null && facingTile.IsEmpty ()) || (m_Bin == null && facingTile.HasBin ()));
     }
 
     private Tile GetFacingTile ()
@@ -241,15 +242,17 @@ public class PlayerController : MonoBehaviour
             TileCoordinates oldFacingTileOffset = ms_NeighboorTiles[m_FacingDirection];
             TileCoordinates newFacingOffset = ms_NeighboorTiles[(EFacingDirection)newFacingDirection];
             TileCoordinates passingTileOffset = oldFacingTileOffset + newFacingOffset;
-
-            return TileManagerProxy.Get ().GetTile (currentTileCoordinates + newFacingOffset).IsEmpty ()
-                && TileManagerProxy.Get ().GetTile (currentTileCoordinates + passingTileOffset).IsEmpty ();
+            Tile nextTile = TileManagerProxy.Get ().GetTile (currentTileCoordinates + newFacingOffset);
+            Tile passingTile = TileManagerProxy.Get ().GetTile (currentTileCoordinates + passingTileOffset);
+            return passingTile != null && passingTile.IsEmpty ()
+                   && nextTile != null && nextTile.IsEmpty ();
         }
     }
 
     public void SetFacingDirection (EFacingDirection newFacingOrientation)
     {
         m_FacingDirection = newFacingOrientation;
+        transform.rotation = new Quaternion (0, 0, ms_FacingAngles[newFacingOrientation], 0);
     }
 
     private int Modulo (int a, int b)
@@ -271,5 +274,13 @@ public class PlayerController : MonoBehaviour
         { EFacingDirection.Left,  new TileCoordinates(-1, 0) },
         { EFacingDirection.Up,    new TileCoordinates(0, 1) },
         { EFacingDirection.Down,  new TileCoordinates(0, -1) },
+    };
+
+    private static Dictionary<EFacingDirection, float> ms_FacingAngles = new Dictionary<EFacingDirection, float> ()
+    {
+        { EFacingDirection.Right, -90 },
+        { EFacingDirection.Left, 90 },
+        { EFacingDirection.Up, 0 },
+        { EFacingDirection.Down, 180 },
     };
 }
