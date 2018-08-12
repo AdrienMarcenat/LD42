@@ -28,7 +28,7 @@ public static class LevelParser
         EFacingDirection playerFacingDirection = EFacingDirection.Right;
         foreach (string line in lines)
         {
-            string[] lienOfTile = line.Split (new char[]{' '}, StringSplitOptions.RemoveEmptyEntries);
+            string[] lienOfTile = line.Split (new char[]{' ', '\t'}, StringSplitOptions.RemoveEmptyEntries);
             x = 0;
             foreach (string tileInfo in lienOfTile)
             {

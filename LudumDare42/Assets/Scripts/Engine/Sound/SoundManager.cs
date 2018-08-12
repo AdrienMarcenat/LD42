@@ -7,12 +7,6 @@ public class SoundManager
 
     public SoundManager ()
     {
-        SoundManagerProxy.Open (this);
-    }
-
-    ~SoundManager ()
-    {
-        SoundManagerProxy.Close ();
     }
 
     public void PlaySingle (AudioClip clip)

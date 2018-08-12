@@ -109,6 +109,7 @@ public class LevelManager
             CommandStackProxy.Get ().Reset ();
             m_LevelDimension = LevelParser.GenLevel ("Datas/Level" + m_CurrentLevel + ".txt");
             new LevelEvent (m_CurrentLevel, true).Push ();
+            new BinSpawnEvent (true, 0).Push ();
         }
     }
 

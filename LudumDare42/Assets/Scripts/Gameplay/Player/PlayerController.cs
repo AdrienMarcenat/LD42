@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
 
     private void AddTurnCommand (bool isTurningRight)
     {
-        int direction = isTurningRight ? -1 : 1;
+        int direction = isTurningRight ? 1 : -1;
         if (CanTurn (Modulo ((int)m_FacingDirection + direction, 4)))
         {
             TurnCommand command = new TurnCommand (gameObject, isTurningRight);
@@ -240,7 +240,7 @@ public class PlayerController : MonoBehaviour
     public void Turn (bool isTurningRight)
     {
         TurnInternal (isTurningRight);
-        StartCoroutine (TurnRoutine (isTurningRight ? -1 : 1));
+        StartCoroutine (TurnRoutine (isTurningRight ? 1 : -1));
     }
 
     public void TurnInstant (bool isTurningRight)
@@ -253,15 +253,15 @@ public class PlayerController : MonoBehaviour
     private void TurnInternal (bool isTurningRight)
     {
         m_OldAngle = transform.rotation.eulerAngles;
-        int direction = isTurningRight ? -1 : 1;
+        int direction = isTurningRight ? 1 : -1;
         m_FacingDirection = (EFacingDirection)Modulo ((int)m_FacingDirection + direction, 4);
         if (isTurningRight)
         {
-            m_TargetAngle = transform.rotation.eulerAngles + new Vector3 (0, 0, -90);
+            m_TargetAngle = transform.rotation.eulerAngles + new Vector3 (0, 0, 90);
         }
         else
         {
-            m_TargetAngle = transform.rotation.eulerAngles + new Vector3 (0, 0, 90);
+            m_TargetAngle = transform.rotation.eulerAngles + new Vector3 (0, 0, -90);
         }
     }
 
