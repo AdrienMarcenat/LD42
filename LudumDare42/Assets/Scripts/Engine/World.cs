@@ -44,6 +44,7 @@ public class World : MonoBehaviour
             GoalManagerProxy.Open (m_GoalManager);
 
             m_GameFlowHSM = new GameFlowHSM ();
+            m_GameFlowHSM.Start (typeof (GameFlowMenuState));
         }
         else if (ms_Instance != this)
         {

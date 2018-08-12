@@ -35,6 +35,6 @@ public class GameFlowHSM : HSM
               , new GameFlowEndLevelState ()
         )
     {
-        Start (typeof (GameFlowMenuState));
+        
     }
 }

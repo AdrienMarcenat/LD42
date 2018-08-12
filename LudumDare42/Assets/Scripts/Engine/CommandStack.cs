@@ -29,7 +29,7 @@ public class CommandStack
     {
         string input = inputEvent.GetInput ();
         EInputState state = inputEvent.GetInputState ();
-        if (inputEvent.GetInputState () == EInputState.Down)
+        if (state == EInputState.Down)
         {
             switch (input)
             {
