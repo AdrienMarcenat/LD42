@@ -548,7 +548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa7dfa77310d96e46bc9942b3244d946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Offset: {x: 0, y: 50, z: 0}
+  m_Offset: {x: 50, y: 0, z: 0}
   m_LevelPositonPrefab: {fileID: 1563540165950680, guid: 4db7dc9747abd114d85004d0039364d5,
     type: 2}
 --- !u!4 &2064903040

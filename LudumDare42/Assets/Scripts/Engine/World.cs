@@ -3,6 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class World : MonoBehaviour
 {
+   [SerializeField] private AudioSource m_EfxSource;
+   [SerializeField] private AudioSource m_MusicSource;
+
     private UnityLogger m_Logger;
     private Updater m_Updater;
     private GameEventManager m_GameEventManager;
@@ -11,6 +14,7 @@ public class World : MonoBehaviour
     private TileManager m_TileManager;
     private CommandStack m_CommandStack;
     private GoalManager m_GoalManager;
+    private SoundManager m_SoundManager;
 
     private GameFlowHSM m_GameFlowHSM;
 
@@ -42,6 +46,9 @@ public class World : MonoBehaviour
             CommandStackProxy.Open (m_CommandStack);
             m_GoalManager = new GoalManager ();
             GoalManagerProxy.Open (m_GoalManager);
+            m_SoundManager = new SoundManager ();
+            SoundManagerProxy.Open (m_SoundManager);
+            m_SoundManager.SetMusicSource (m_MusicSource);
 
             m_GameFlowHSM = new GameFlowHSM ();
             m_GameFlowHSM.Start (typeof (GameFlowMenuState));

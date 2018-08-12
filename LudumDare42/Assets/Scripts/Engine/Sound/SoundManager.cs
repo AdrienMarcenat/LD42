@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class SoundManager
 {
-    [SerializeField] AudioSource m_EfxSource;
-    [SerializeField] AudioSource m_MusicSource;
+    private AudioSource m_EfxSource;
+    private AudioSource m_MusicSource;
 
     public SoundManager ()
     {
@@ -35,6 +34,11 @@ public class SoundManager
            m_MusicSource.Play ();
            m_MusicSource.loop = true;
         }
+    }
+
+    public void SetMusicSource(AudioSource source)
+    {
+        m_MusicSource = source;
     }
 }
 
