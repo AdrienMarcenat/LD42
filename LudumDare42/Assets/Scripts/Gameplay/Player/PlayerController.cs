@@ -70,6 +70,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void AddBinSpawnCommand ()
+    {
+        if (LevelManagerProxy.Get ().GetMode () == ELevelMode.MaxBin)
+        {
+            BinSpawnCommand command = new BinSpawnCommand (gameObject);
+            command.Execute ();
+            CommandStackProxy.Get ().PushCommand (command);
+        }
+    }
+
     public void OnGameEvent (PlayerInputGameEvent inputEvent)
     {
         if(UpdaterProxy.Get().IsPaused())
@@ -103,6 +113,9 @@ public class PlayerController : MonoBehaviour
                     break;
                 case "Grab / Ungrab":
                     AddToggleGrabCommand ();
+                    break;
+                case "BinSpawnRequest":
+                    AddBinSpawnCommand ();
                     break;
                 default:
                     break;
@@ -160,7 +173,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void ToggleGrab ()
+    private void SetBinCoordinates()
+    {
+        if(m_Bin != null)
+        {
+            m_Bin.SetCoordinates (GetFacingTileCoordinates ());
+        }
+    }
+
+    public void ToggleGrab (bool undo = false)
     {
         Tile facingTile = GetFacingTile ();
         if (facingTile == null)
@@ -171,9 +192,10 @@ public class PlayerController : MonoBehaviour
         {
             if (facingTile.IsEmpty ())
             {
-                //new BinEvent ((Bin)m_Bin).Push ();
+                SetBinCoordinates ();
                 facingTile.SetTileObject (m_Bin);
                 m_Bin.transform.SetParent (null, true);
+                GoalManagerProxy.Get ().OnBinPlaced ((Bin)m_Bin);
                 m_Bin = null;
                 m_Animator.SetBool ("IsGrabbing", false);
             }
@@ -186,6 +208,7 @@ public class PlayerController : MonoBehaviour
                 facingTile.SetTileObject (null);
                 bin.transform.SetParent (transform, true);
                 m_Bin = bin;
+                GoalManagerProxy.Get ().OnBinRemoved ((Bin)m_Bin, undo);
                 m_Animator.SetBool ("IsGrabbing", true);
             }
         }

@@ -1,14 +1,36 @@
 ﻿
 using UnityEngine;
 
+public class BinSpawnEvent : GameEvent
+{
+    public BinSpawnEvent (bool shouldSpawn, int binNumber) : base ("BinSpawner")
+    {
+        m_ShouldSpawn = shouldSpawn;
+        m_BinNumber = binNumber;
+    }
+
+    public bool ShouldSpawn ()
+    {
+        return m_ShouldSpawn;
+    }
+
+    public int GetBinNumber ()
+    {
+        return m_BinNumber;
+
+    }
+    private bool m_ShouldSpawn;
+    private int m_BinNumber;
+}
+
 public class BinSpawnCommand : Command
 {
     public BinSpawnCommand (GameObject actor) : base (actor)
     {
     }
 
-    public override void Execute () { m_Actor.GetComponent<BinSpawner> ().SpawnBin (); }
-    public override void Undo () { m_Actor.GetComponent<BinSpawner> ().UnSpawnbin (); }
+    public override void Execute () { new BinSpawnEvent (true, 0).Push (); }
+    public override void Undo () { new BinSpawnEvent (false, 0).Push (); }
 }
 
 public class BinSpawner : TileObject
@@ -19,56 +41,52 @@ public class BinSpawner : TileObject
     public override void Init (ETileObjectType type, int x, int y, string[] args)
     {
         base.Init (type, x, y, args);
-        this.RegisterAsListener ("Player", typeof (PlayerInputGameEvent));
+        this.RegisterAsListener ("BinSpawner", typeof (BinSpawnEvent));
         m_BinPrefab = RessourceManager.LoadPrefab ("TileObject_Bin");
         ms_BinNumber = 0;
     }
 
     private void OnDestroy ()
     {
-        this.UnregisterAsListener ("Player");
+        this.UnregisterAsListener ("BinSpawner");
     }
 
-    public void OnGameEvent (PlayerInputGameEvent inputEvent)
+    public void OnGameEvent (BinSpawnEvent spawnEvent)
     {
-        string input = inputEvent.GetInput ();
-        EInputState state = inputEvent.GetInputState ();
-        if (inputEvent.GetInputState () == EInputState.Down)
+        if (spawnEvent.ShouldSpawn ())
         {
-            switch (input)
-            {
-                case "BinSpawnRequest":
-                    AddBinSpawnCommand ();
-                    break;
-                default:
-                    break;
-            }
+            SpawnBin (spawnEvent.GetBinNumber ());
+        }
+        else
+        {
+            UnSpawnbin ();
         }
     }
 
-    private void AddBinSpawnCommand ()
+    public void SpawnBin (int binNumber)
     {
-        if (TileManagerProxy.Get ().GetTile (GetCoordinates ()).GetTileObject () == null)
+        if (TileManagerProxy.Get ().GetTile (GetCoordinates ()).GetTileObject () != null)
         {
-            BinSpawnCommand command = new BinSpawnCommand (gameObject);
-            command.Execute ();
-            CommandStackProxy.Get ().PushCommand (command);
+            return;
         }
-    }
 
-    public void SpawnBin ()
-    {
         GameObject binGameObject = GameObject.Instantiate (m_BinPrefab);
         TileCoordinates coordinates = GetCoordinates ();
-        binGameObject.transform.position = new Vector3 (coordinates.x.ToWorldUnit(), coordinates.y.ToWorldUnit (), 0);
+        binGameObject.transform.position = new Vector3 (coordinates.x.ToWorldUnit (), coordinates.y.ToWorldUnit (), 0);
         Bin bin = binGameObject.GetComponent<Bin> ();
-        bin.Init (ETileObjectType.Bin, coordinates.x, coordinates.y, new string[] { "0" });
+        bin.Init (ETileObjectType.Bin, coordinates.x, coordinates.y, new string[] { binNumber.ToString() });
+        bin.SetIsSpawned (true);
         TileManagerProxy.Get ().SetTileObject (coordinates, bin);
         ms_BinNumber++;
     }
 
     public void UnSpawnbin ()
     {
+        if (TileManagerProxy.Get ().GetTile (GetCoordinates ()).GetTileObject () == null)
+        {
+            return;
+        }
+
         Destroy (TileManagerProxy.Get ().GetTile (GetCoordinates ()).GetTileObject ().gameObject);
         ms_BinNumber--;
     }

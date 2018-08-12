@@ -49,6 +49,11 @@ public class CommandStack
     {
         return m_CommandStack.Count;
     }
+
+    public void Reset()
+    {
+        m_CommandStack.Clear ();
+    }
 }
 
 public class CommandStackProxy : UniqueProxy<CommandStack>

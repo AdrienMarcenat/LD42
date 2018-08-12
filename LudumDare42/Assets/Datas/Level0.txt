@@ -1,3 +1,5 @@
 ﻿X X X X X X X
 S,Down N N N N N,BinSpawner
+N N N N N N,Bin,0
+N,BinGoal,1 N N N,BinGoal,0 N N
 X X X X X X X

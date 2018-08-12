@@ -5,7 +5,6 @@ public class GameFlowEndLevelState : HSMState
     public override void OnEnter ()
     {
         UpdaterProxy.Get ().SetPause (true);
-        Time.timeScale = 0;
         this.RegisterAsListener ("Game", typeof (GameFlowEvent));
     }
 
@@ -13,10 +12,14 @@ public class GameFlowEndLevelState : HSMState
     {
         switch (flowEvent.GetAction ())
         {
-            case EGameFlowAction.Quit:
+            case EGameFlowAction.Menu:
                 ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowMenuState));
                 break;
             case EGameFlowAction.Retry:
+                ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowLevelState));
+                break;
+            case EGameFlowAction.NextLevel:
+                LevelManagerProxy.Get ().NextLevel ();
                 ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowLevelState));
                 break;
         }
@@ -25,7 +28,6 @@ public class GameFlowEndLevelState : HSMState
     public override void OnExit ()
     {
         this.UnregisterAsListener ("Game");
-        Time.timeScale = 1;
         UpdaterProxy.Get ().SetPause (false);
     }
 }

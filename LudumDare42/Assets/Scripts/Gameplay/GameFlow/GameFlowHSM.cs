@@ -6,6 +6,7 @@
     NextLevel,
     LevelSelection,
     Menu,
+    EndLevel,
     Quit,
 }
 

@@ -36,5 +36,5 @@ public class ToggleGrabCommand : Command
     }
 
     public override void Execute () { m_Actor.GetComponent<PlayerController> ().ToggleGrab (); }
-    public override void Undo () { m_Actor.GetComponent<PlayerController> ().ToggleGrab (); }
+    public override void Undo () { m_Actor.GetComponent<PlayerController> ().ToggleGrab (true); }
 }

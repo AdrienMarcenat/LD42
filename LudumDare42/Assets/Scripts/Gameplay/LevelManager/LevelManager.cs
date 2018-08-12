@@ -26,12 +26,19 @@ public class LevelEvent : GameEvent
     private bool m_Enter;
 }
 
+public enum ELevelMode
+{
+    Normal,
+    MaxBin,
+}
+
 public class LevelManager
 {
     private int m_CurrentLevel = 0;
     private Dictionary<int, string> m_LevelIdToName;
     private static string ms_LevelFilename = "Datas/LevelNames.txt";
     private TileCoordinates m_LevelDimension;
+    private ELevelMode m_LevelMode = ELevelMode.Normal;
 
     public LevelManager ()
     {
@@ -44,6 +51,11 @@ public class LevelManager
     ~LevelManager ()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    public ELevelMode GetMode()
+    {
+        return m_LevelMode;
     }
 
     public void LoadScene (int sceneIndex)
@@ -93,6 +105,8 @@ public class LevelManager
         if (GetActiveSceneName () == "Level")
         {
             TileManagerProxy.Get ().Reset ();
+            GoalManagerProxy.Get ().Reset ();
+            CommandStackProxy.Get ().Reset ();
             m_LevelDimension = LevelParser.GenLevel ("Datas/Level" + m_CurrentLevel + ".txt");
             new LevelEvent (m_CurrentLevel, true).Push ();
         }
