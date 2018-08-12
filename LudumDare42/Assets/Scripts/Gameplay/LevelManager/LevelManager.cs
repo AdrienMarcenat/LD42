@@ -1,4 +1,7 @@
 ﻿
+using System;
+using System.Collections.Generic;
+using System.IO;
 using UnityEngine.SceneManagement;
 
 public class LevelEvent : GameEvent
@@ -25,10 +28,14 @@ public class LevelEvent : GameEvent
 
 public class LevelManager
 {
-    private int m_CurrentLevel = 1;
+    private int m_CurrentLevel = 0;
+    private Dictionary<int, string> m_LevelIdToName;
+    private static string ms_LevelFilename = "Datas/LevelNames.txt";
     
     public LevelManager ()
     {
+        m_LevelIdToName = new Dictionary<int, string> ();
+        FillLevelNames (ms_LevelFilename);
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
     
@@ -69,6 +76,16 @@ public void LoadScene (int sceneIndex)
         return SceneManager.GetActiveScene ().name;
     }
 
+    public string GetCurrentLevelName()
+    {
+        return m_LevelIdToName[m_CurrentLevel];
+    }
+
+    public Dictionary<int, string> GetLevelNames()
+    {
+        return m_LevelIdToName;
+    }
+
     public void OnSceneLoaded (Scene scene, LoadSceneMode mode)
     {
         if (GetActiveSceneName() == "Level")
@@ -76,6 +93,32 @@ public void LoadScene (int sceneIndex)
             TileManagerProxy.Get ().Reset ();
             LevelParser.GenLevel ("Datas/Level" + m_CurrentLevel + ".txt");
             new LevelEvent (m_CurrentLevel, true).Push ();
+        }
+    }
+
+    private void FillLevelNames (string filename)
+    {
+        char[] separators = { ':' };
+#if UNITY_EDITOR
+        filename = "Assets/" + filename;
+#endif
+
+        string[] lines = File.ReadAllLines (filename);
+
+        for (int i = 0; i < lines.Length; i++)
+        {
+            string[] datas = lines[i].Split (separators);
+
+            // If there is an error in print a debug message
+            if (datas.Length != 2)
+            {
+                this.DebugLog ("Invalid number of data line " + i + " expecting 2, got " + datas.Length);
+                return;
+            }
+
+            int levelIndex = Int32.Parse ((String)datas.GetValue (0)); ;
+            string levelName = datas[1];
+            m_LevelIdToName.Add (levelIndex, levelName);
         }
     }
 }
