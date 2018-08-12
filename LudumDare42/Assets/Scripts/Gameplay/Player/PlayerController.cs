@@ -320,7 +320,7 @@ public class PlayerController : MonoBehaviour
             TileCoordinates passingTileOffset = oldFacingTileOffset + newFacingOffset;
             Tile nextTile = TileManagerProxy.Get ().GetTile (currentTileCoordinates + newFacingOffset);
             Tile passingTile = TileManagerProxy.Get ().GetTile (currentTileCoordinates + passingTileOffset);
-            return passingTile != null && passingTile.IsEmpty ()
+            return passingTile != null && passingTile.CanTurn ()
                    && nextTile != null && nextTile.IsEmpty ();
         }
     }

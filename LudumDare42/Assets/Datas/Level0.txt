@@ -1,5 +1,5 @@
 ﻿N,Wall,Down,wall-corner  N,Wall,Down,wall N,Wall,Down,wall          N,Wall,Down,wall N,Wall,Down,wall N,Wall,Down,wall N,Wall,Down,wall  N,Wall,Left,wall-corner
-N,Wall,Right,wall        N,Player,Down    N,Wall,Down,deco-flowers  N                N                N                N,BinSpawner      N,Wall,Left,wall
+N,Wall,Right,wall        C,Wall,Down,carpet-round N,Player,Down     N,Wall,Down,deco-flowers          N                N                N,BinSpawner      N,Wall,Left,wall
 N,Wall,Right,wall        N                N                         N                N                N                N                 N,Wall,Left,wall
 N,Wall,Right,wall        N,BinGoal,1      N                         N                N,BinGoal,0      N                N			     N,Wall,Left,wall
 N,Wall,Right,wall-corner N,Wall,Up,wall   N,Wall,Up,wall            N,Wall,Up,wall   N,Wall,Up,wall   N,Wall,Up,wall   N,Wall,Up,wall    N,Wall,Up,wall-corner

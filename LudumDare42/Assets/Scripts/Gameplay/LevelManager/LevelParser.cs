@@ -10,7 +10,7 @@ public static class LevelParser
     {
         { "X", ETileType.None },
         { "N", ETileType.Normal },
-        { "C", ETileType.QuarterCircle },
+        { "C", ETileType.Passing },
     };
 
     public static TileCoordinates GenLevel (string filename)

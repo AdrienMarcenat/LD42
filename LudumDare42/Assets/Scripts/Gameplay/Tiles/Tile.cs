@@ -6,12 +6,12 @@ public enum ETileType
     None,
 
     Normal,
-    QuarterCircle,
+    Passing,
 }
 
 public struct TileCoordinates
 {
-    public TileCoordinates(int x = 0, int y = 0)
+    public TileCoordinates (int x = 0, int y = 0)
     {
         this.x = x;
         this.y = y;
@@ -55,7 +55,7 @@ public class Tile : MonoBehaviour
 
     public bool HasBin ()
     {
-        return m_Object != null && m_Object.GetObjectType() == ETileObjectType.Bin;
+        return m_Object != null && m_Object.GetObjectType () == ETileObjectType.Bin;
     }
 
     public TileObject GetTileObject ()
@@ -65,7 +65,12 @@ public class Tile : MonoBehaviour
 
     public bool IsEmpty ()
     {
-        return m_Object == null || !m_Object.IsObstacle();
+        return m_Object == null || !m_Object.IsObstacle ();
+    }
+
+    public bool CanTurn ()
+    {
+        return IsEmpty () || (m_Type == ETileType.Passing);
     }
 
     public TileCoordinates GetCoordinates ()
@@ -83,7 +88,7 @@ public class Tile : MonoBehaviour
         m_Type = type;
     }
 
-    public void SetTileObject(TileObject tileObject)
+    public void SetTileObject (TileObject tileObject)
     {
         m_Object = tileObject;
         if (m_Object != null)
