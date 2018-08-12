@@ -13,7 +13,7 @@ public class LevelSelectionMenu : MonoBehaviour
         m_CurrenLevelName = GetComponent<Text> ();
         m_LevelPositions = GameObject.Find ("LevelPositions").GetComponentsInChildren<Transform> ().SubArray (1);
         Dictionary<int, string> levelIdToNames = LevelManagerProxy.Get ().GetLevelNames ();
-        foreach(int id in levelIdToNames.Keys)
+        foreach (int id in levelIdToNames.Keys)
         {
             GameObject level = GameObject.Instantiate (m_LevelPrefab);
             level.transform.position = m_LevelPositions[id].position;
@@ -22,10 +22,10 @@ public class LevelSelectionMenu : MonoBehaviour
 
     private void Update ()
     {
-        m_CurrenLevelName.text = LevelManagerProxy.Get ().GetCurrentLevelName ();
-        if(Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown (KeyCode.Space))
+        m_CurrenLevelName.text = LevelManagerProxy.Get ().GetCurrentLevelName () + " Best: " + LevelManagerProxy.Get ().GetCurrentLevelScore ();
+        if (Input.GetKeyDown (KeyCode.Return) || Input.GetKeyDown (KeyCode.Space))
         {
-            new GameFlowEvent (EGameFlowAction.Start).Push();
+            new GameFlowEvent (EGameFlowAction.Start).Push ();
         }
         if (Input.GetKeyDown (KeyCode.Escape))
         {

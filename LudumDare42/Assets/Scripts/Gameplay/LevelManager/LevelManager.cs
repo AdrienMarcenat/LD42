@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LevelEvent : GameEvent
@@ -36,6 +37,7 @@ public class LevelManager
 {
     private int m_CurrentLevel = 0;
     private Dictionary<int, string> m_LevelIdToName;
+    private Dictionary<int, int> m_LevelIdToScore;
     private static string ms_LevelFilename = "Datas/LevelNames.txt";
     private TileCoordinates m_LevelDimension;
     private ELevelMode m_LevelMode = ELevelMode.Normal;
@@ -44,7 +46,9 @@ public class LevelManager
     {
         m_LevelDimension = new TileCoordinates (0, 0);
         m_LevelIdToName = new Dictionary<int, string> ();
+        m_LevelIdToScore = new Dictionary<int, int>();
         FillLevelNames (ms_LevelFilename);
+        FillLevelScores ();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -142,6 +146,27 @@ public class LevelManager
             string levelName = datas[1];
             m_LevelIdToName.Add (levelIndex, levelName);
         }
+    }
+
+    private void FillLevelScores ()
+    {
+        foreach (int levelID in m_LevelIdToName.Keys)
+        {
+            int score = PlayerPrefs.GetInt (m_LevelIdToName[levelID], -1);
+            m_LevelIdToScore.Add (levelID, score);
+        }
+    }
+
+    public int GetCurrentLevelScore ()
+    {
+        return m_LevelIdToScore[m_CurrentLevel];
+    }
+
+    public void OnLevelEnd()
+    {
+        int score = CommandStackProxy.Get().GetNumberOfCommand();
+        PlayerPrefs.SetInt (GetCurrentLevelName (), score);
+        m_LevelIdToScore[m_CurrentLevel] = score;
     }
 }
 

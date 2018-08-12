@@ -5,6 +5,7 @@ public class GameFlowEndLevelState : HSMState
     public override void OnEnter ()
     {
         UpdaterProxy.Get ().SetPause (true);
+        LevelManagerProxy.Get ().OnLevelEnd ();
         this.RegisterAsListener ("Game", typeof (GameFlowEvent));
     }
 
