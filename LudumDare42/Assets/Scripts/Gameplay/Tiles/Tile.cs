@@ -7,7 +7,6 @@ public enum ETileType
 
     Normal,
     Wall,
-    WallCorner,
     Acid,
     Start,
 }

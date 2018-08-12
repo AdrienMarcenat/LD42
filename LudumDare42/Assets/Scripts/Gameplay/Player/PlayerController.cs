@@ -347,7 +347,7 @@ public class PlayerController : MonoBehaviour
         { EFacingDirection.Down,  new TileCoordinates(0, -1) },
     };
 
-    private static Dictionary<EFacingDirection, float> ms_FacingAngles = new Dictionary<EFacingDirection, float> ()
+    public static Dictionary<EFacingDirection, float> ms_FacingAngles = new Dictionary<EFacingDirection, float> ()
     {
         { EFacingDirection.Right, 90 },
         { EFacingDirection.Left, -90 },

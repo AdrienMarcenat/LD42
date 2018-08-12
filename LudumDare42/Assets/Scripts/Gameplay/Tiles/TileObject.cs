@@ -6,6 +6,7 @@ public enum ETileObjectType
     Bin,
     BinGoal,
     BinSpawner,
+    Wall,
 }
 
 public class TileObject : MonoBehaviour
