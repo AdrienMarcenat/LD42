@@ -51,9 +51,7 @@ public class GameEventManager
                 m_GameEventQueue.Enqueue (e);
                 break;
             case GameEvent.EProtocol.Instant:
-                m_DispatchGuard = true;
                 Notify (e);
-                m_DispatchGuard = false;
                 break;
             case GameEvent.EProtocol.Discard:
                 break;
@@ -66,11 +64,17 @@ public class GameEventManager
     public void UpdateFirst ()
     {
         m_DispatchGuard = true;
+        List<GameEvent> eventToDispatch = new List<GameEvent> ();
         while (m_GameEventQueue.Count != 0)
         {
-            Notify (m_GameEventQueue.Dequeue ());
+            eventToDispatch.Add (m_GameEventQueue.Dequeue ());
         }
         m_DispatchGuard = false;
+        foreach (GameEvent gameEvent in eventToDispatch)
+        {
+            Notify (gameEvent);
+        }
+        eventToDispatch.Clear ();
     }
 
     private void Notify (GameEvent e)

@@ -10,6 +10,10 @@ public class BinGoal : TileObject
     {
         base.Init (type, x, y, args);
         m_Number = Int32.Parse ((String)args.GetValue (0));
+        GameObject numberObject = GameObject.Instantiate (RessourceManager.LoadPrefab ("number"));
+        numberObject.transform.SetParent (transform, false);
+        numberObject.GetComponent<SpriteRenderer> ().sprite = RessourceManager.LoadSprite ("number-" + (m_Number + 1), 0);
+        numberObject.GetComponent<SpriteRenderer> ().sortingOrder = 0;
         GoalManagerProxy.Get ().RegisterBinGoal (this);
     }
 

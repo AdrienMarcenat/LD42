@@ -11,6 +11,7 @@ public static class LevelParser
         { "X", ETileType.None },
         { "N", ETileType.Normal },
         { "W", ETileType.Wall },
+        { "WC", ETileType.WallCorner },
         { "S", ETileType.Start },
         { "A", ETileType.Acid },
     };
@@ -46,7 +47,7 @@ public static class LevelParser
                     yPlayer = y;
                     playerFacingDirection = (EFacingDirection)Enum.Parse (typeof (EFacingDirection), (String)words.GetValue (1), true);
                 }
-                GameObject tileGameObject = GameObject.Instantiate (RessourceManager.LoadPrefab ("Tile"));
+                GameObject tileGameObject = GameObject.Instantiate (RessourceManager.LoadPrefab ("Tile_" + words[0]));
                 tileGameObject.transform.position = new Vector3 (x.ToWorldUnit (), y.ToWorldUnit (), 0);
                 Tile tile = tileGameObject.AddComponent<Tile> ();
                 tile.SetCoordinates (new TileCoordinates (x, y));

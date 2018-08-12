@@ -11,6 +11,9 @@ public class Bin : TileObject
     {
         base.Init (type, x, y, args);
         m_Number = Int32.Parse ((String)args.GetValue (0));
+        GameObject numberObject = GameObject.Instantiate (RessourceManager.LoadPrefab ("number"));
+        numberObject.transform.SetParent (transform, false);
+        numberObject.GetComponent<SpriteRenderer> ().sprite = RessourceManager.LoadSprite ("number-" + (m_Number + 1), 0);
         GoalManagerProxy.Get ().RegisterBin (this);
     }
 
@@ -29,17 +32,17 @@ public class Bin : TileObject
         return true;
     }
 
-    public int GetNumber()
+    public int GetNumber ()
     {
         return m_Number;
     }
 
-    public bool IsSpawned()
+    public bool IsSpawned ()
     {
         return m_IsSpawned;
     }
 
-    public void SetIsSpawned(bool isSpawned)
+    public void SetIsSpawned (bool isSpawned)
     {
         m_IsSpawned = isSpawned;
     }
