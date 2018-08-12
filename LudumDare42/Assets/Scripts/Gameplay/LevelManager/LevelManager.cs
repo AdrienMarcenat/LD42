@@ -6,13 +6,13 @@ using UnityEngine.SceneManagement;
 
 public class LevelEvent : GameEvent
 {
-    public LevelEvent(int levelIndex, bool enter) : base("Game", EProtocol.Instant)
+    public LevelEvent (int levelIndex, bool enter) : base ("Game", EProtocol.Instant)
     {
         m_LevelIndex = levelIndex;
         m_Enter = enter;
     }
 
-    public int GetLevelIndex()
+    public int GetLevelIndex ()
     {
         return m_LevelIndex;
     }
@@ -31,20 +31,22 @@ public class LevelManager
     private int m_CurrentLevel = 0;
     private Dictionary<int, string> m_LevelIdToName;
     private static string ms_LevelFilename = "Datas/LevelNames.txt";
-    
+    private TileCoordinates m_LevelDimension;
+
     public LevelManager ()
     {
+        m_LevelDimension = new TileCoordinates (0, 0);
         m_LevelIdToName = new Dictionary<int, string> ();
         FillLevelNames (ms_LevelFilename);
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
-    
+
     ~LevelManager ()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-public void LoadScene (int sceneIndex)
+    public void LoadScene (int sceneIndex)
     {
         new LevelEvent (m_CurrentLevel, false).Push ();
         SceneManager.LoadScene (sceneIndex);
@@ -71,29 +73,34 @@ public void LoadScene (int sceneIndex)
         m_CurrentLevel++;
     }
 
-    public string GetActiveSceneName()
+    public string GetActiveSceneName ()
     {
         return SceneManager.GetActiveScene ().name;
     }
 
-    public string GetCurrentLevelName()
+    public string GetCurrentLevelName ()
     {
         return m_LevelIdToName[m_CurrentLevel];
     }
 
-    public Dictionary<int, string> GetLevelNames()
+    public Dictionary<int, string> GetLevelNames ()
     {
         return m_LevelIdToName;
     }
 
     public void OnSceneLoaded (Scene scene, LoadSceneMode mode)
     {
-        if (GetActiveSceneName() == "Level")
+        if (GetActiveSceneName () == "Level")
         {
             TileManagerProxy.Get ().Reset ();
-            LevelParser.GenLevel ("Datas/Level" + m_CurrentLevel + ".txt");
+            m_LevelDimension = LevelParser.GenLevel ("Datas/Level" + m_CurrentLevel + ".txt");
             new LevelEvent (m_CurrentLevel, true).Push ();
         }
+    }
+
+    public TileCoordinates GetLevelDimension ()
+    {
+        return m_LevelDimension;
     }
 
     private void FillLevelNames (string filename)
