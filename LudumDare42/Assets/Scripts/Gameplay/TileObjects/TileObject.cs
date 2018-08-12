@@ -3,6 +3,7 @@
 public enum ETileObjectType
 {
     None,
+    Player,
     Bin,
     BinGoal,
     BinSpawner,

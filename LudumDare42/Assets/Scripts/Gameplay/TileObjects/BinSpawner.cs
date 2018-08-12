@@ -65,7 +65,7 @@ public class BinSpawner : TileObject
 
     public void SpawnBin (int binNumber)
     {
-        if (TileManagerProxy.Get ().GetTile (GetCoordinates ()).GetTileObject () != null)
+        if (!TileManagerProxy.Get ().GetTile (GetCoordinates ()).IsEmpty ())
         {
             return;
         }

@@ -125,15 +125,20 @@ public class PlayerController : MonoBehaviour
 
     public void Move (int xDir, int yDir)
     {
-        m_TargetPos = new Vector3 (transform.position.x + xDir.ToWorldUnit (), transform.position.y + yDir.ToWorldUnit (), transform.position.z);
+        MoveInternal (xDir, yDir);
         StartCoroutine (MoveRoutine ());
     }
 
     public void MoveInstant (int xDir, int yDir)
     {
         StopMovement ();
-        m_TargetPos = new Vector3 (transform.position.x + xDir.ToWorldUnit (), transform.position.y + yDir.ToWorldUnit (), transform.position.z);
+        MoveInternal (xDir, yDir);
         transform.position = m_TargetPos;
+    }
+
+    private void MoveInternal(int xDir, int yDir)
+    {
+        m_TargetPos = new Vector3 (transform.position.x + xDir.ToWorldUnit (), transform.position.y + yDir.ToWorldUnit (), transform.position.z);
     }
 
     IEnumerator MoveRoutine ()

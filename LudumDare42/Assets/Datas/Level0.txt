@@ -1,5 +1,5 @@
-﻿W,Wall,Down,wall-corner  W,Wall,Down,wall W,Wall,Down,wall          W,Wall,Down,wall W,Wall,Down,wall W,Wall,Down,wall W,Wall,Down,wall  W,Wall,Left,wall-corner
-W,Wall,Right,wall        S,Down           W,Wall,Down,deco-flowers  N                N                N                N,BinSpawner      W,Wall,Left,wall
-W,Wall,Right,wall        N                N                         N                N                N                N                 W,Wall,Left,wall
-W,Wall,Right,wall        N,BinGoal,1      N                         N                N,BinGoal,0      N                N					 W,Wall,Left,wall
-W,Wall,Right,wall-corner W,Wall,Up,wall   W,Wall,Up,wall            W,Wall,Up,wall   W,Wall,Up,wall   W,Wall,Up,wall   W,Wall,Up,wall    W,Wall,Up,wall-corner
+﻿N,Wall,Down,wall-corner  N,Wall,Down,wall N,Wall,Down,wall          N,Wall,Down,wall N,Wall,Down,wall N,Wall,Down,wall N,Wall,Down,wall  N,Wall,Left,wall-corner
+N,Wall,Right,wall        N,Player,Down    N,Wall,Down,deco-flowers  N                N                N                N,BinSpawner      N,Wall,Left,wall
+N,Wall,Right,wall        N                N                         N                N                N                N                 N,Wall,Left,wall
+N,Wall,Right,wall        N,BinGoal,1      N                         N                N,BinGoal,0      N                N			     N,Wall,Left,wall
+N,Wall,Right,wall-corner N,Wall,Up,wall   N,Wall,Up,wall            N,Wall,Up,wall   N,Wall,Up,wall   N,Wall,Up,wall   N,Wall,Up,wall    N,Wall,Up,wall-corner

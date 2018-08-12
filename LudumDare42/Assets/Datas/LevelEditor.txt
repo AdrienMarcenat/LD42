@@ -1,0 +1,14 @@
+pour les niveaux l'éditeur marche comme suis:
+-chaque tile est spéparé par de espaces ou des tabs
+-une tile est décrit par plusieurs choses séparé par des ,
+-ces choses sont dans l'ordre: le type de la tile (X=rien, W=obstacle, N=normale, C = quart de cercle, S=départ) puis l'object qui va sur la tile puis les arguments de l'objet
+-les arguments à fournir pour les objets de type Wall c'est  l'orientation et le nom du sprite (genre deco-flowers)
+-les arguments à fournir pour un Bin ou BinGoal c'est son numéro
+-as d'argument pour le BinSpawner
+
+Exemple:
+W,Wall,Down,wall-corner  W,Wall,Down,wall W,Wall,Down,wall          W,Wall,Down,wall W,Wall,Down,wall W,Wall,Down,wall W,Wall,Down,wall  W,Wall,Left,wall-corner
+W,Wall,Right,wall        S,Down           W,Wall,Down,deco-flowers  N                N                N                N,BinSpawner      W,Wall,Left,wall
+W,Wall,Right,wall        N                N                         N                N                N                N                 W,Wall,Left,wall
+W,Wall,Right,wall        N,BinGoal,1      N                         N                N,BinGoal,0      N                N				 W,Wall,Left,wall
+W,Wall,Right,wall-corner W,Wall,Up,wall   W,Wall,Up,wall            W,Wall,Up,wall   W,Wall,Up,wall   W,Wall,Up,wall   W,Wall,Up,wall    W,Wall,Up,wall-corner

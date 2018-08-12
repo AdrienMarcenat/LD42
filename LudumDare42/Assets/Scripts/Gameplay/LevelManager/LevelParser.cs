@@ -10,9 +10,7 @@ public static class LevelParser
     {
         { "X", ETileType.None },
         { "N", ETileType.Normal },
-        { "W", ETileType.Wall },
-        { "S", ETileType.Start },
-        { "A", ETileType.Acid },
+        { "C", ETileType.QuarterCircle },
     };
 
     public static TileCoordinates GenLevel (string filename)
@@ -23,9 +21,6 @@ public static class LevelParser
         string[] lines = File.ReadAllLines (filename);
         int x = 0;
         int y = 0;
-        int xPlayer = 0;
-        int yPlayer = 0;
-        EFacingDirection playerFacingDirection = EFacingDirection.Right;
         foreach (string line in lines)
         {
             string[] lienOfTile = line.Split (new char[]{' ', '\t'}, StringSplitOptions.RemoveEmptyEntries);
@@ -40,12 +35,6 @@ public static class LevelParser
                     x++;
                     continue;
                 }
-                if (tileType == ETileType.Start)
-                {
-                    xPlayer = x;
-                    yPlayer = y;
-                    playerFacingDirection = (EFacingDirection)Enum.Parse (typeof (EFacingDirection), (String)words.GetValue (1), true);
-                }
                 GameObject tileGameObject = GameObject.Instantiate (RessourceManager.LoadPrefab ("Tile"));
                 tileGameObject.transform.position = new Vector3 (x.ToWorldUnit (), y.ToWorldUnit (), 0);
                 Tile tile = tileGameObject.AddComponent<Tile> ();
@@ -54,29 +43,19 @@ public static class LevelParser
 
                 TileManagerProxy.Get ().AddTile (tile);
 
-                if (words.Length > 1 && tileType != ETileType.Start)
+                if (words.Length > 1)
                 {
                     ETileObjectType tileObjectType = (ETileObjectType)Enum.Parse (typeof (ETileObjectType), (String)words.GetValue (1), true);
                     GameObject tileObjectGameObject = GameObject.Instantiate (RessourceManager.LoadPrefab ("TileObject_" + words[1]));
                     tileObjectGameObject.transform.position = new Vector3 (x.ToWorldUnit (), y.ToWorldUnit (), 0);
                     TileObject tileObject = tileObjectGameObject.GetComponent<TileObject> ();
                     tileObject.Init (tileObjectType, x, y, words.SubArray (2, -1));
-                    if (tileObject.CanBeGrabed ())
-                    {
-                        tile.SetTileObject (tileObject);
-                    }
+                    tile.SetTileObject (tileObject);
                 }
 
                 x++;
             }
             y--;
-        }
-
-        {
-            GameObject playerObject = GameObject.Instantiate (RessourceManager.LoadPrefab ("Player"));
-            playerObject.transform.position = new Vector3 (xPlayer.ToWorldUnit (), yPlayer.ToWorldUnit (), 0);
-            PlayerController controller = playerObject.AddComponent<PlayerController> ();
-            controller.SetFacingDirection (playerFacingDirection);
         }
 
         return new TileCoordinates (x, y);

@@ -6,9 +6,7 @@ public enum ETileType
     None,
 
     Normal,
-    Wall,
-    Acid,
-    Start,
+    QuarterCircle,
 }
 
 public struct TileCoordinates
@@ -67,7 +65,7 @@ public class Tile : MonoBehaviour
 
     public bool IsEmpty ()
     {
-        return m_Object == null && m_Type != ETileType.Wall;
+        return m_Object == null || !m_Object.IsObstacle();
     }
 
     public TileCoordinates GetCoordinates ()
