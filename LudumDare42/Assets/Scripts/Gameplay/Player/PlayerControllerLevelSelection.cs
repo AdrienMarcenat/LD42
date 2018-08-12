@@ -11,7 +11,7 @@ public class PlayerControllerLevelSelection : MonoBehaviour
     private Transform[] m_LevelPositions;
     private int m_CurrentLevel;
 
-    void Awake ()
+    void Start ()
     {
         m_LevelPositions = GameObject.Find("LevelPositions").GetComponentsInChildren<Transform> ().SubArray (1);
         m_CurrentLevel = 0;

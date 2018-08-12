@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4891306517377990}
   - component: {fileID: 212765308893316862}
-  - component: {fileID: 114490669098289246}
+  - component: {fileID: 114030045122515894}
   m_Layer: 0
   m_Name: TileObject_Wall
   m_TagString: Untagged
@@ -41,7 +41,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114490669098289246
+--- !u!114 &114030045122515894
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -49,7 +49,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1657832263063900}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b05b985a34c73d54593ff79940d28e7d, type: 3}
+  m_Script: {fileID: 11500000, guid: 7a7bb8eb51d4dfb41b68eaa7b68cf84f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Type: 4
