@@ -53,24 +53,24 @@ public class PlayerControllerLevelSelection : MonoBehaviour
             m_CurrentLevel = nextLevel;
             LevelManagerProxy.Get ().SetLevelIndex (m_CurrentLevel);
             m_TargetPos = m_LevelPositions[m_CurrentLevel].position;
-            StartCoroutine (MoveRoutine ());
+            StartCoroutine (MoveRoutine (isGoingUp));
         }
     }
 
-    IEnumerator MoveRoutine ()
+    IEnumerator MoveRoutine (bool isGoingUp)
     {
-        SetIsMoving (true);
+        SetIsMoving (true, isGoingUp);
         while (transform.position != m_TargetPos)
         {
             transform.position = Vector3.MoveTowards (transform.position, m_TargetPos, Time.deltaTime * m_MoveSpeed);
             yield return null;
         }
-        SetIsMoving (false);
+        SetIsMoving (false, isGoingUp);
     }
 
-    private void SetIsMoving (bool isMoving)
+    private void SetIsMoving (bool isMoving, bool isGoingUp)
     {
         m_IsMoving = isMoving;
-        m_Animator.SetBool ("IsMoving", m_IsMoving);
+        m_Animator.SetBool (isGoingUp ? "IsMovingUp" : "IsMovingDown", m_IsMoving);
     }
 }

@@ -13,8 +13,8 @@ public enum EFacingDirection
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float m_MoveSpeed = 50f;
-    [SerializeField] private float m_TurnSpeed = 250f;
+    [SerializeField] private float m_MoveSpeed = 150f;
+    [SerializeField] private float m_TurnSpeed = 400f;
 
     private EFacingDirection m_FacingDirection;
     private TileObject m_Bin;
@@ -170,6 +170,7 @@ public class PlayerController : MonoBehaviour
                 facingTile.SetTileObject (m_Bin);
                 m_Bin.transform.SetParent (null, true);
                 m_Bin = null;
+                m_Animator.SetBool ("IsGrabbing", false);
             }
         }
         else
@@ -180,6 +181,7 @@ public class PlayerController : MonoBehaviour
                 facingTile.SetTileObject (null);
                 bin.transform.SetParent (transform, true);
                 m_Bin = bin;
+                m_Animator.SetBool ("IsGrabbing", true);
             }
         }
     }
@@ -227,11 +229,11 @@ public class PlayerController : MonoBehaviour
         m_FacingDirection = (EFacingDirection)Modulo ((int)m_FacingDirection + direction, 4);
         if (isTurningRight)
         {
-            m_TargetAngle = transform.rotation.eulerAngles + new Vector3 (0, 0, 90);
+            m_TargetAngle = transform.rotation.eulerAngles + new Vector3 (0, 0, -90);
         }
         else
         {
-            m_TargetAngle = transform.rotation.eulerAngles + new Vector3 (0, 0, -90);
+            m_TargetAngle = transform.rotation.eulerAngles + new Vector3 (0, 0, 90);
         }
     }
 
@@ -321,7 +323,7 @@ public class PlayerController : MonoBehaviour
     {
         { EFacingDirection.Right, 90 },
         { EFacingDirection.Left, -90 },
-        { EFacingDirection.Up, 0 },
-        { EFacingDirection.Down, 180 },
+        { EFacingDirection.Up, 180 },
+        { EFacingDirection.Down, 0 },
     };
 }
