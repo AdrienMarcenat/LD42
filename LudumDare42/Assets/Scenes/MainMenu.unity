@@ -555,6 +555,7 @@ GameObject:
   - component: {fileID: 195227091}
   - component: {fileID: 195227090}
   - component: {fileID: 195227089}
+  - component: {fileID: 195227092}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -682,6 +683,17 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 195227087}
   m_CullTransparentMesh: 0
+--- !u!114 &195227092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 195227087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75acbb68f041dc942a98fc41a175d45e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &293411549
 Prefab:
   m_ObjectHideFlags: 0
@@ -812,6 +824,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1838587515254702, guid: 1b21e360c5820df42a715a3732662caa,
     type: 2}
   m_PrefabInternal: {fileID: 293411549}
+--- !u!1 &293411552 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1735228289275868, guid: 1b21e360c5820df42a715a3732662caa,
+    type: 2}
+  m_PrefabInternal: {fileID: 293411549}
+--- !u!114 &293411553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 293411552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75acbb68f041dc942a98fc41a175d45e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &449434850
 GameObject:
   m_ObjectHideFlags: 0
@@ -1140,7 +1168,7 @@ MonoBehaviour:
   m_Script: {fileID: -619905303, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 1827456406}
+  m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 5
 --- !u!4 &564599078
@@ -2005,6 +2033,7 @@ GameObject:
   - component: {fileID: 1827456409}
   - component: {fileID: 1827456408}
   - component: {fileID: 1827456407}
+  - component: {fileID: 1827456411}
   m_Layer: 5
   m_Name: StartButton
   m_TagString: Untagged
@@ -2121,6 +2150,17 @@ RectTransform:
   m_AnchoredPosition: {x: 160, y: -90}
   m_SizeDelta: {x: 100, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1827456411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1827456406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75acbb68f041dc942a98fc41a175d45e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1866424421
 Prefab:
   m_ObjectHideFlags: 0
