@@ -33,10 +33,10 @@ public class PlayerControllerLevelSelection : MonoBehaviour
         {
             switch (input)
             {
-                case "Up":
+                case "Right":
                     Move (true);
                     break;
-                case "Down":
+                case "Left":
                     Move (false);
                     break;
                 default:
@@ -45,32 +45,32 @@ public class PlayerControllerLevelSelection : MonoBehaviour
         }
     }
 
-    public void Move (bool isGoingUp)
+    public void Move (bool isGoingRight)
     {
-        int nextLevel = m_CurrentLevel + (isGoingUp ? 1 : -1);
+        int nextLevel = m_CurrentLevel + (isGoingRight ? 1 : -1);
         if (!m_IsMoving && nextLevel >= 0 && nextLevel < m_LevelPositions.Length)
         {
             m_CurrentLevel = nextLevel;
             LevelManagerProxy.Get ().SetLevelIndex (m_CurrentLevel);
             m_TargetPos = m_LevelPositions[m_CurrentLevel].position;
-            StartCoroutine (MoveRoutine (isGoingUp));
+            StartCoroutine (MoveRoutine (isGoingRight));
         }
     }
 
-    IEnumerator MoveRoutine (bool isGoingUp)
+    IEnumerator MoveRoutine (bool isGoingRight)
     {
-        SetIsMoving (true, isGoingUp);
+        SetIsMoving (true, isGoingRight);
         while (transform.position != m_TargetPos)
         {
             transform.position = Vector3.MoveTowards (transform.position, m_TargetPos, Time.deltaTime * m_MoveSpeed);
             yield return null;
         }
-        SetIsMoving (false, isGoingUp);
+        SetIsMoving (false, isGoingRight);
     }
 
-    private void SetIsMoving (bool isMoving, bool isGoingUp)
+    private void SetIsMoving (bool isMoving, bool isGoingRight)
     {
         m_IsMoving = isMoving;
-        m_Animator.SetBool (isGoingUp ? "IsMovingUp" : "IsMovingDown", m_IsMoving);
+        m_Animator.SetBool (isGoingRight ? "IsMovingUp" : "IsMovingDown", m_IsMoving);
     }
 }
