@@ -287,6 +287,11 @@ Prefab:
       propertyPath: m_Color.b
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114524638422580888, guid: 91e3a17f926b7104d9fd794ece6a0c3f,
+        type: 2}
+      propertyPath: m_Offset.y
+      value: 50
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91e3a17f926b7104d9fd794ece6a0c3f, type: 2}
   m_IsPrefabAsset: 0
@@ -847,7 +852,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa7dfa77310d96e46bc9942b3244d946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Offset: {x: 50, y: 0, z: 0}
+  m_Spacing: {x: 100, y: 0, z: 0}
   m_LevelPositonPrefab: {fileID: 1563540165950680, guid: 4db7dc9747abd114d85004d0039364d5,
     type: 2}
 --- !u!4 &2064903040

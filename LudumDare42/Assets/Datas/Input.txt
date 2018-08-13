@@ -5,6 +5,5 @@ Up:UpArrow
 Down:DownArrow
 TurnRight:D
 TurnLeft:Q
-BinSpawnRequest:X
 Undo:U
 Grab / Ungrab:Space

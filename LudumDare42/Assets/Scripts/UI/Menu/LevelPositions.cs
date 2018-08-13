@@ -2,7 +2,7 @@
 
 public class LevelPositions : MonoBehaviour
 {
-    [SerializeField] private Vector3 m_Offset;
+    [SerializeField] private Vector3 m_Spacing;
     [SerializeField] private GameObject m_LevelPositonPrefab;
 
     private void Awake ()
@@ -13,7 +13,7 @@ public class LevelPositions : MonoBehaviour
             GameObject level = GameObject.Instantiate (m_LevelPositonPrefab);
             level.transform.SetParent (transform, false);
             level.transform.position = levelpos;
-            levelpos += m_Offset;
+            levelpos += m_Spacing;
         }
     }
 }

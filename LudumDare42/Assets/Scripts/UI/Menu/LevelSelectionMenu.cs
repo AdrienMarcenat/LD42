@@ -7,6 +7,7 @@ public class LevelSelectionMenu : MonoBehaviour
     [SerializeField] private GameObject m_LevelPrefab;
     [SerializeField] private Text m_BestNumber;
     [SerializeField] private Text m_CurrenLevelName;
+    [SerializeField] private Vector3 m_Offset;
 
     private Transform[] m_LevelPositions;
 
@@ -17,7 +18,7 @@ public class LevelSelectionMenu : MonoBehaviour
         foreach (int id in levelIdToNames.Keys)
         {
             GameObject level = GameObject.Instantiate (m_LevelPrefab);
-            level.transform.position = m_LevelPositions[id].position;
+            level.transform.position = m_LevelPositions[id].position + m_Offset;
         }
     }
 
