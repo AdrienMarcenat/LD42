@@ -9,6 +9,7 @@
     EndLevel,
     StartDialogue,
     EndDialogue,
+    EndLevelPanel,
     Quit,
 }
 

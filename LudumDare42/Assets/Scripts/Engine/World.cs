@@ -49,6 +49,7 @@ public class World : MonoBehaviour
             m_SoundManager = new SoundManager ();
             SoundManagerProxy.Open (m_SoundManager);
             m_SoundManager.SetMusicSource (m_MusicSource);
+            m_SoundManager.SetFXSource (m_EfxSource);
 
             m_GameFlowHSM = new GameFlowHSM ();
             m_GameFlowHSM.Start (typeof (GameFlowMenuState));

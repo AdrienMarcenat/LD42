@@ -13,6 +13,12 @@ public class GameFlowEndLevelState : HSMState
     {
         switch (flowEvent.GetAction ())
         {
+            case EGameFlowAction.StartDialogue:
+                ChangeNextTransition (HSMTransition.EType.Child, typeof (GameFlowDialogueState));
+                break;
+            case EGameFlowAction.EndDialogue:
+                new GameFlowEvent (EGameFlowAction.EndLevelPanel).Push ();
+                break;
             case EGameFlowAction.Menu:
                 ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowMenuState));
                 break;
@@ -20,8 +26,11 @@ public class GameFlowEndLevelState : HSMState
                 ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowLevelState));
                 break;
             case EGameFlowAction.NextLevel:
-                LevelManagerProxy.Get ().NextLevel ();
-                ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowLevelState));
+                if (!LevelManagerProxy.Get ().IsLastLevel ())
+                {
+                    LevelManagerProxy.Get ().NextLevel ();
+                    ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowLevelState));
+                }
                 break;
         }
     }

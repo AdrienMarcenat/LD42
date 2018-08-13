@@ -27,6 +27,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private Image m_Thumbnail;
 
     private Queue<Dialogue.Sentence> m_Sentences;
+    private bool m_IsInDialogue = false;
     private static string ms_DialogueFileName = "Datas/Dialogues.txt";
 
     void Awake ()
@@ -49,7 +50,7 @@ public class DialogueManager : MonoBehaviour
 
     public void OnGameEvent (PlayerInputGameEvent inputEvent)
     {
-        if (inputEvent.GetInput () == "Submit" && inputEvent.GetInputState () == EInputState.Down)
+        if (inputEvent.GetInput () == "Submit" && inputEvent.GetInputState () == EInputState.Down && m_IsInDialogue)
         {
             DisplayNextSentence ();
         }
@@ -57,7 +58,7 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue (Dialogue dialogue)
     {
-        new GameFlowEvent (EGameFlowAction.StartDialogue).Push ();
+        m_IsInDialogue = true;
         m_Animator.SetBool ("IsOpen", true);
         m_Sentences.Clear ();
 
@@ -99,12 +100,14 @@ public class DialogueManager : MonoBehaviour
 
     public void EndDialogue ()
     {
+        m_IsInDialogue = false;
         m_Animator.SetBool ("IsOpen", false);
         new GameFlowEvent (EGameFlowAction.EndDialogue).Push ();
     }
 
     public void TriggerDialogue (string tag)
     {
+        new GameFlowEvent (EGameFlowAction.StartDialogue).Push ();
         Dialogue dialogue = new Dialogue ();
 
         char[] separators = { ':' };
@@ -136,6 +139,7 @@ public class DialogueManager : MonoBehaviour
         if (dialogueBeginning == 0)
         {
             this.DebugLog ("Could not find dialogue with tag " + tag);
+            new GameFlowEvent (EGameFlowAction.EndDialogue).Push ();
             return;
         }
 

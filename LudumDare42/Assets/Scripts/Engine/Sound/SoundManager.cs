@@ -17,24 +17,29 @@ public class SoundManager
 
     public void PlayMultiple (AudioClip clip)
     {
-       m_EfxSource.PlayOneShot (clip);
+        m_EfxSource.PlayOneShot (clip);
     }
 
     public void PlayMusic (AudioClip clip)
     {
         if (m_MusicSource.clip != clip)
         {
-           m_MusicSource.clip = clip;
-           m_MusicSource.Play ();
-           m_MusicSource.loop = true;
+            m_MusicSource.clip = clip;
+            m_MusicSource.Play ();
+            m_MusicSource.loop = true;
         }
     }
 
-    public void SetMusicSource(AudioSource source)
+    public void SetMusicSource (AudioSource source)
     {
         m_MusicSource = source;
+    }
+
+    public void SetFXSource (AudioSource source)
+    {
+        m_EfxSource = source;
     }
 }
 
 public class SoundManagerProxy : UniqueProxy<SoundManager>
-{}
+{ }

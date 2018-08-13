@@ -21,7 +21,11 @@ public class GameFlowLevelState : HSMState
         switch (flowEvent.GetAction ())
         {
             case EGameFlowAction.StartDialogue:
+                UpdaterProxy.Get ().SetPause (true);
                 ChangeNextTransition (HSMTransition.EType.Child, typeof (GameFlowDialogueState));
+                break;
+            case EGameFlowAction.EndDialogue:
+                UpdaterProxy.Get ().SetPause (false);
                 break;
             case EGameFlowAction.EndLevel:
                 ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowEndLevelState));

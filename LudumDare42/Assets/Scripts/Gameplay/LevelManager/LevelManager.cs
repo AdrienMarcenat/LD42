@@ -85,9 +85,17 @@ public class LevelManager
         m_CurrentLevel = levelIndex;
     }
 
+    public bool IsLastLevel()
+    {
+        return m_CurrentLevel == m_LevelIdToName.Count - 1;
+    }
+
     public void NextLevel ()
     {
-        m_CurrentLevel++;
+        if (!IsLastLevel())
+        {
+            m_CurrentLevel++;
+        }
     }
 
     public string GetActiveSceneName ()
@@ -116,7 +124,7 @@ public class LevelManager
             m_LevelDimension = LevelParser.GenLevel ("Datas/" + levelName + ".txt");
             new LevelEvent (m_CurrentLevel, true).Push ();
             new BinSpawnEvent (true, 0).Push ();
-            new DialogueEvent (levelName).Push ();
+            new DialogueEvent (levelName+"-start").Push ();
         }
     }
 
@@ -174,6 +182,7 @@ public class LevelManager
             PlayerPrefs.SetInt (GetCurrentLevelName (), score);
             m_LevelIdToScore[m_CurrentLevel] = score;
         }
+        new DialogueEvent (GetCurrentLevelName() + "-end").Push ();
     }
 }
 

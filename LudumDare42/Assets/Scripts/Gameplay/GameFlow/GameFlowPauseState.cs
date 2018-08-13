@@ -2,12 +2,12 @@
 
 public class PauseEvent : GameEvent
 {
-    public PauseEvent(bool isPaused) : base("Game")
+    public PauseEvent (bool isPaused) : base ("Game")
     {
         m_IsPaused = isPaused;
     }
 
-    public bool IsPaused()
+    public bool IsPaused ()
     {
         return m_IsPaused;
     }
@@ -36,8 +36,11 @@ public class GameFlowPauseState : HSMState
                 ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowLevelSelectionState));
                 break;
             case EGameFlowAction.NextLevel:
-                LevelManagerProxy.Get ().NextLevel ();
-                ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowLevelState));
+                if (!LevelManagerProxy.Get ().IsLastLevel ())
+                {
+                    LevelManagerProxy.Get ().NextLevel ();
+                    ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowLevelState));
+                }
                 break;
             case EGameFlowAction.Retry:
                 ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowLevelState));
