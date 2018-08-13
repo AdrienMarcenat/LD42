@@ -1,5 +1,7 @@
-﻿X X X X X X X
-X X N N X X X
-S,Right N N N N N,BinSpawner
-X X N N X X X
-X X X X X X X
+N,Wall,Down,wall-corner  N,Wall,Down,wall 	N,Wall,Down,wall	N,Wall,Down,wall	N,Wall,Left,wall-corner			X			X	
+N,Wall,Right,wall        N			N			N,BinGoal,2		N,Wall,Left,wall			X			X
+N,Wall,Right,wall        N			N,Wall,Down,deco-plant	N			N,Wall,Left,wall-corner-reversed	N,Wall,Down,wall	N,Wall,Left,wall-corner		
+N,Wall,Right,wall        N,BinGoal,1		N			N			N					N			N,Wall,Left,wall
+N,Wall,Right,wall        N			N,Wall,Down,deco-table	N			N,Wall,Down,deco-flowers		N			N,Wall,Left,wall
+N,Wall,Right,wall        N			N,BinGoal,0		N,Player,Right		N,BinSpawner				N			N,Wall,Left,wall
+N,Wall,Right,wall-corner N,Wall,Up,wall		N,Wall,Up,wall		N,Wall,Up,wall		N,Wall,Up,wall				N,Wall,Up,wall		N,Wall,Up,wall-corner

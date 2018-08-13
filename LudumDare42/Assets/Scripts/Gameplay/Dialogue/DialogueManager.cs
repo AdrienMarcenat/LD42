@@ -136,6 +136,7 @@ public class DialogueManager : MonoBehaviour
         if (dialogueBeginning == 0)
         {
             this.DebugLog ("Could not find dialogue with tag " + tag);
+            return;
         }
 
         for (int i = dialogueBeginning; i < dialogueEnd; i++)

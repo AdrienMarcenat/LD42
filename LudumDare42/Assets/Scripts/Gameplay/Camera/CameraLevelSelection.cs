@@ -11,6 +11,6 @@ public class CameraLevelSelection : MonoBehaviour
 
     void Update ()
     {
-        transform.position = new Vector3 (transform.position.x, m_Target.position.y, transform.position.z);
+        transform.position = new Vector3 (m_Target.position.x, m_Target.position.y, transform.position.z);
     }
 }

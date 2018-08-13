@@ -1,4 +1,5 @@
-﻿X X X X X
-N N N N N
-S,Right X N,BinSpawner X N
-X X X X X
+X				N,Wall,Down,wall-corner			N,Wall,Down,wall		N,Wall,Down,wall	N,Wall,Down,wall		N,Wall,Left,wall-corner			X
+N,Wall,Down,wall-corner		N,Wall,Down,wall-corner-reversed	C,Wall,Down,carpet-round	N,BinGoal,2		C,Wall,Left,carpet-round	N,Wall,Left,wall-corner-reversed	N,Wall,Left,wall-corner
+N,Wall,Right,wall		N					N,BinGoal,3			N,Player,Right		N,BinGoal,0			N,BinSpawner				N,Wall,Left,wall
+N,Wall,Right,wall-corner	N,Wall,Right,wall-corner-reversed	C,Wall,Right,carpet-round	N,BinGoal,1		C,Wall,Up,carpet-round		N,Wall,Up,wall-corner-reversed		N,Wall,Up,wall-corner
+X				N,Wall,Right,wall-corner		N,Wall,Up,wall			N,Wall,Up,wall		N,Wall,Up,wall			N,Wall,Up,wall-corner			X

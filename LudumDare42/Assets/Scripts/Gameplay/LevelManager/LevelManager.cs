@@ -112,10 +112,11 @@ public class LevelManager
             TileManagerProxy.Get ().Reset ();
             GoalManagerProxy.Get ().Reset ();
             CommandStackProxy.Get ().Reset ();
-            m_LevelDimension = LevelParser.GenLevel ("Datas/Level" + m_CurrentLevel + ".txt");
+            string levelName = GetCurrentLevelName ();
+            m_LevelDimension = LevelParser.GenLevel ("Datas/" + levelName + ".txt");
             new LevelEvent (m_CurrentLevel, true).Push ();
             new BinSpawnEvent (true, 0).Push ();
-            new DialogueEvent (GetCurrentLevelName ()).Push ();
+            new DialogueEvent (levelName).Push ();
         }
     }
 
