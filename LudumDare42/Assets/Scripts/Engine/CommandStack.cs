@@ -27,6 +27,10 @@ public class CommandStack
 
     public void OnGameEvent (PlayerInputGameEvent inputEvent)
     {
+        if (UpdaterProxy.Get().IsPaused())
+        {
+            return;
+        }
         string input = inputEvent.GetInput ();
         EInputState state = inputEvent.GetInputState ();
         if (state == EInputState.Down)

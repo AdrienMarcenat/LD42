@@ -1,4 +1,5 @@
 ﻿
+using System.Collections;
 using UnityEngine;
 
 public class BinSpawnEvent : GameEvent
@@ -36,6 +37,7 @@ public class BinSpawnCommand : Command
 public class BinSpawner : TileObject
 {
     private GameObject m_BinPrefab;
+    private Animator m_Animator;
     public static int ms_BinNumber;
 
     public override void Init (ETileObjectType type, int x, int y, string[] args)
@@ -44,6 +46,7 @@ public class BinSpawner : TileObject
         this.RegisterAsListener ("BinSpawner", typeof (BinSpawnEvent));
         m_BinPrefab = RessourceManager.LoadPrefab ("TileObject_Bin");
         ms_BinNumber = 0;
+        m_Animator = GetComponent<Animator> ();
     }
 
     private void OnDestroy ()
@@ -72,16 +75,28 @@ public class BinSpawner : TileObject
             return;
         }
 
+        StartCoroutine (SpawnRountine (binNumber));
+    }
+
+    IEnumerator SpawnRountine (int binNumber)
+    {
+        m_Animator.SetBool ("IsSpawning", true);
+        UpdaterProxy.Get ().SetPause (true);
+        yield return new WaitForSeconds (1f);
+
         GameObject binGameObject = GameObject.Instantiate (m_BinPrefab);
         TileCoordinates coordinates = GetCoordinates ();
         binGameObject.transform.position = new Vector3 (coordinates.x.ToWorldUnit (), coordinates.y.ToWorldUnit (), 0);
         Bin bin = binGameObject.GetComponent<Bin> ();
-        bin.Init (ETileObjectType.Bin, coordinates.x, coordinates.y, new string[] { binNumber.ToString() });
+        bin.Init (ETileObjectType.Bin, coordinates.x, coordinates.y, new string[] { binNumber.ToString () });
         bin.SetSpawnedCommandNumber ();
         TileManagerProxy.Get ().SetTileObject (coordinates, bin);
         ms_BinNumber++;
-    }
 
+        UpdaterProxy.Get ().SetPause (false);
+        m_Animator.SetBool ("IsSpawning", false);
+    }
+    
     public void UnSpawnbin ()
     {
         if (TileManagerProxy.Get ().GetTile (GetCoordinates ()).GetTileObject () == null)
