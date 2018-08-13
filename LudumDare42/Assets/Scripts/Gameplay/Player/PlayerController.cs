@@ -13,8 +13,11 @@ public enum EFacingDirection
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float m_MoveSpeed = 150f;
+    [SerializeField] private float m_MoveSpeed = 300f;
+    [SerializeField] private float m_MoveSpeedWhenHolding = 150f;
     [SerializeField] private float m_TurnSpeed = 400f;
+    [SerializeField] private int m_UndoPerSecond = 10;
+    [SerializeField] private float m_HeldUndoTreshold = 2f;
 
     private EFacingDirection m_FacingDirection;
     private TileObject m_Bin;
@@ -25,6 +28,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 m_OldAngle;
     private Vector3 m_TargetAngle;
     private Animator m_Animator;
+    private bool m_IsUndoing = false;
+    private float m_TimeHoldingUndo = 0f;
 
     void Awake ()
     {
@@ -92,18 +97,6 @@ public class PlayerController : MonoBehaviour
         {
             switch (input)
             {
-                case "Right":
-                    AddMoveCommand (1, 0);
-                    break;
-                case "Left":
-                    AddMoveCommand (-1, 0);
-                    break;
-                case "Up":
-                    AddMoveCommand (0, 1);
-                    break;
-                case "Down":
-                    AddMoveCommand (0, -1);
-                    break;
                 case "TurnRight":
                     AddTurnCommand ((int)EFacingDirection.Right);
                     break;
@@ -126,6 +119,45 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
+        if (state == EInputState.Held || state == EInputState.Down)
+        {
+            switch (input)
+            {
+                case "Right":
+                    AddMoveCommand (1, 0);
+                    break;
+                case "Left":
+                    AddMoveCommand (-1, 0);
+                    break;
+                case "Up":
+                    AddMoveCommand (0, 1);
+                    break;
+                case "Down":
+                    AddMoveCommand (0, -1);
+                    break;
+                case "Undo":
+                    m_TimeHoldingUndo += Time.deltaTime;
+                    if (!m_IsUndoing && (m_TimeHoldingUndo > m_HeldUndoTreshold || state == EInputState.Down))
+                    {
+                        StartCoroutine (Undo ());
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (state == EInputState.Up && input == "Undo")
+        {
+            m_TimeHoldingUndo = 0f;
+        }
+    }
+
+    IEnumerator Undo ()
+    {
+        m_IsUndoing = true;
+        yield return new WaitForSeconds (1f / m_UndoPerSecond);
+        CommandStackProxy.Get ().Undo ();
+        m_IsUndoing = false;
     }
 
     public void Move (int xDir, int yDir)
@@ -151,7 +183,7 @@ public class PlayerController : MonoBehaviour
         SetIsMoving (true);
         while (transform.position != m_TargetPos)
         {
-            transform.position = Vector3.MoveTowards (transform.position, m_TargetPos, Time.deltaTime * m_MoveSpeed);
+            transform.position = Vector3.MoveTowards (transform.position, m_TargetPos, Time.deltaTime * (m_Bin == null ? m_MoveSpeed : m_MoveSpeedWhenHolding));
             yield return null;
         }
         SetIsMoving (false);

@@ -30,7 +30,7 @@ public class PlayerControllerLevelSelection : MonoBehaviour
     {
         string input = inputEvent.GetInput ();
         EInputState state = inputEvent.GetInputState ();
-        if (state == EInputState.Down)
+        if (state != EInputState.Up)
         {
             switch (input)
             {
