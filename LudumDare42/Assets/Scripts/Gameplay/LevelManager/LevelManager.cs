@@ -38,7 +38,7 @@ public class LevelManager
     private int m_CurrentLevel = 0;
     private Dictionary<int, string> m_LevelIdToName;
     private Dictionary<int, int> m_LevelIdToScore;
-    private static string ms_LevelFilename = "Datas/LevelNames.txt";
+    private static string ms_LevelFilename = "/LevelNames.txt";
     private TileCoordinates m_LevelDimension;
     private ELevelMode m_LevelMode = ELevelMode.Normal;
     private bool m_SkipDialogue = false;
@@ -85,14 +85,14 @@ public class LevelManager
         m_CurrentLevel = levelIndex;
     }
 
-    public bool IsLastLevel()
+    public bool IsLastLevel ()
     {
         return m_CurrentLevel == m_LevelIdToName.Count - 1;
     }
 
     public void NextLevel ()
     {
-        if (!IsLastLevel())
+        if (!IsLastLevel ())
         {
             m_CurrentLevel++;
         }
@@ -108,6 +108,11 @@ public class LevelManager
         return m_LevelIdToName[m_CurrentLevel];
     }
 
+    public int GetCurrentLevelID ()
+    {
+        return m_CurrentLevel;
+    }
+
     public Dictionary<int, string> GetLevelNames ()
     {
         return m_LevelIdToName;
@@ -121,10 +126,10 @@ public class LevelManager
             GoalManagerProxy.Get ().Reset ();
             CommandStackProxy.Get ().Reset ();
             string levelName = GetCurrentLevelName ();
-            m_LevelDimension = LevelParser.GenLevel ("Datas/" + levelName + ".txt");
+            m_LevelDimension = LevelParser.GenLevel ("/" + levelName + ".txt");
             new LevelEvent (m_CurrentLevel, true).Push ();
             new BinSpawnEvent (true, 0).Push ();
-            new DialogueEvent (levelName+"-start").Push ();
+            new DialogueEvent (levelName + "-start").Push ();
         }
     }
 
@@ -136,9 +141,7 @@ public class LevelManager
     private void FillLevelNames (string filename)
     {
         char[] separators = { ':' };
-#if UNITY_EDITOR
-        filename = "Assets/" + filename;
-#endif
+        filename = Application.streamingAssetsPath + filename;
 
         string[] lines = File.ReadAllLines (filename);
 
@@ -182,7 +185,7 @@ public class LevelManager
             PlayerPrefs.SetInt (GetCurrentLevelName (), score);
             m_LevelIdToScore[m_CurrentLevel] = score;
         }
-        new DialogueEvent (GetCurrentLevelName() + "-end").Push ();
+        new DialogueEvent (GetCurrentLevelName () + "-end").Push ();
     }
 }
 

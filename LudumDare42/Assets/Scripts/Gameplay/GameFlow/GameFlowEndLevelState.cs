@@ -19,6 +19,9 @@ public class GameFlowEndLevelState : HSMState
             case EGameFlowAction.EndDialogue:
                 new GameFlowEvent (EGameFlowAction.EndLevelPanel).Push ();
                 break;
+            case EGameFlowAction.LevelSelection:
+                ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowLevelSelectionState));
+                break;
             case EGameFlowAction.Menu:
                 ChangeNextTransition (HSMTransition.EType.Clear, typeof (GameFlowMenuState));
                 break;

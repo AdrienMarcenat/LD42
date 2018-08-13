@@ -1,0 +1,150 @@
+
+
+Cannot Spawn
+[
+	Mousy-the-Mover:"I can't send you the next box, the place is blocked by something !"
+]
+
+An easy move-start
+[
+	Mousy-the-Mover:"Hello fellow mover ! Today is you first day, isn't it ?"
+	Mousy-the-Mover:"Don't worry, our job is easy, just grab the box with space and put it on the mark"
+]
+
+An easy move-end
+[
+	Mousy-the-Mover:"See ? Piece of cake !"
+]
+
+
+Turn around-start
+[
+	Mousy-the-Mover:"What are you looking at ? The box is behind you ! Just turn with Q and D"
+]
+
+Turn around-end
+[
+	Mousy-the-Mover:"Hurrah !"
+]
+
+More space-start
+[
+	Mousy-the-Mover:"This time you have a lot of space so there should be no problem."
+]
+
+More space-end
+[
+	Mousy-the-Mover:"Yeah, you are really good at it !"
+]
+
+Drive yourself into a corner-start
+[
+	Mousy-the-Mover:"If you make a mistake, just press U ! It's the magical power of all movers."
+	Mousy-the-Mover:"But don't tell anyone else !!!"
+]
+
+Drive yourself into a corner-end
+[
+	Mousy-the-Mover:"Congrat ! Now you're ready for some real customers"
+]
+
+Let go-start
+[
+	Misses Meow:"Meow !!!"
+]
+
+Mister Crab-start
+[
+	Elisabeth (Swan):"Hello, i've made some room for you to move, I hope it will help you !"
+]
+
+Mister Crab-end
+[
+	Elisabeth (Swan):"Oh thank young bear ! Now everything is in place."
+]
+
+Volte-face-start
+[
+	Mister Pat:"Sometimes, a cat have to pivot, that's the market my dear !"
+]
+
+Twice as much work-start
+[
+	Not Pinky Pie:"I have a lot of stuff, I hope you don't mind..."
+	Mousy-the-Mover:"No that's okay." 
+	Mousy-the-Mover:"Once you've placed the first box I will give you the next one"
+]
+
+Three precious thing-start
+[
+	Mister Pat:"Yes it is me again, I have a lot of houses."
+	Mister Pat:"Put my stuff here, and don't touch anything with you filthy bear hands (no pun intended)"
+]
+
+Messy living room-start
+[
+	Misses Meow:"Meow !!!"
+]
+
+Unreachable-start
+[
+	The Great Swantsby:"I've heard about the new mover, i've been told he is very talented..."
+	Mousy-the-Mover:"yes, he is doing great so far !"
+	The Great Swantsby:"Let's see if it is true ! I, The Great Swantsby, challenge you !"
+	Mousy-the-Mover:"mmmm, ok... as long as we get paid... (what a strange customer)"
+]
+
+Unreachable-end
+[
+	The Great Swantsby:"What, you actually manage to do this ?"
+	The Great Swantsby:"Curse you little bear ! Be prepared for our next encounter, for I will return !!!"
+	Mousy-the-Mover:"If there was a door in this room, I bet he would have slam it..."
+	Mousy-the-Mover:"Speaking of door how are we gonna leave !!!"
+]
+
+Don't rush-start
+[
+	Shippy:"Eh man, take your time ok... no need to hurry...zzzz"
+]
+
+Don't rush-end
+[
+	Shippy:"zzzzzzzzzzzzzzzzzzzzzzzzzzz"
+	Mousy-the-Mover:"Let's leave him... we have other customers today."
+]
+
+Just enough place-start
+[
+	Mister Small:"I know i't small, but I'm small too !, there's just enough place for me."
+	Mousy-the-Mover:"WHO'S SMALL ?"
+	Mousy-the-Mover:"oh sorry I'm just very touchy about that..."
+]
+
+Merry-go-round-start
+[
+	Elisabeth (Swan):"Oh Hello again ! This is more convenient as it does not require to draw another character"
+	Mousy-the-Mover:"Don't listen to what he say, he's old and silly."
+]
+
+One way-start
+[
+	Not Pinky Pie:"Don't you find my new house lovely ? I've decorated it myself"
+	Mousy-the-Mover:"Yes yes it's very...pink."
+]
+
+Lateral thinking-start
+[
+	The Great Swantsby:"We meet again, little bear, I bet you are surprise !"
+	Mousy-the-Mover:"You've called us 5 minutes ago and give us your name and address, so...not really, no."
+	The Great Swantsby:"Enough! Behold my new house !"
+	The Great Swantsby:"Let's see if you can think out of the box, little bear ! mouhahahah"
+]
+
+Lateral thinking-end
+[
+	The Great Swantsby:"Wait, but.. noooo ! How did you do that ?"
+	The Great Swantsby:"It should have required to change the very fabric of the universe !"
+	Mousy-the-Mover:"Really not a big deal for us !"
+	The Great Swantsby:"qfhsqhfhfliuhfilzeuhruizar"
+	Mousy-the-Mover:"Oups, we might have broken something..."
+]

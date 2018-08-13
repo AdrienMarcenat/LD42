@@ -18,6 +18,7 @@ public class Updater
 {
     List<AnyObject>[] m_ObjectListPerPass;
     private bool m_UpdateGuard = false;
+    private int m_PauseLock = 0;
 
     public Updater ()
     {
@@ -72,7 +73,8 @@ public class Updater
 
     public void SetPause (bool pause)
     {
-        m_IsPaused = pause;
+        m_PauseLock += pause ? 1 : -1;
+        m_IsPaused = m_PauseLock > 0;
     }
 
     public bool IsPaused ()

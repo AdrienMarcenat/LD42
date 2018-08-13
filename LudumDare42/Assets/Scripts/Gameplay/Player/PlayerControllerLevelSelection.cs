@@ -14,8 +14,9 @@ public class PlayerControllerLevelSelection : MonoBehaviour
     void Start ()
     {
         m_LevelPositions = GameObject.Find("LevelPositions").GetComponentsInChildren<Transform> ().SubArray (1);
-        m_CurrentLevel = 0;
-        m_TargetPos = transform.position;
+        m_CurrentLevel = LevelManagerProxy.Get().GetCurrentLevelID ();
+        m_TargetPos = m_LevelPositions[m_CurrentLevel].position;
+        transform.position = m_TargetPos;
         m_Animator = GetComponent<Animator> ();
         this.RegisterAsListener ("Player", typeof (PlayerInputGameEvent));
     }

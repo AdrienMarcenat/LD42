@@ -28,7 +28,7 @@ public class DialogueManager : MonoBehaviour
 
     private Queue<Dialogue.Sentence> m_Sentences;
     private bool m_IsInDialogue = false;
-    private static string ms_DialogueFileName = "Datas/Dialogues.txt";
+    private static string ms_DialogueFileName = "/Dialogues.txt";
 
     void Awake ()
     {
@@ -112,9 +112,7 @@ public class DialogueManager : MonoBehaviour
 
         char[] separators = { ':' };
         string filename = ms_DialogueFileName;
-#if UNITY_EDITOR
-        filename = "Assets/" + ms_DialogueFileName;
-#endif
+        filename = Application.streamingAssetsPath + filename;
 
         string[] lines = File.ReadAllLines (filename);
 

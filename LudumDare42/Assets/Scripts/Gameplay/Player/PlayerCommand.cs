@@ -18,15 +18,17 @@ public class MoveCommand : Command
 
 public class TurnCommand : Command
 {
-    public override void Execute () { m_Actor.GetComponent<PlayerController> ().Turn (m_IsTurningRight); }
-    public override void Undo () { m_Actor.GetComponent<PlayerController> ().TurnInstant (!m_IsTurningRight); }
+    public override void Execute () { m_Actor.GetComponent<PlayerController> ().Turn (m_NewFacingDirection); }
+    public override void Undo () { m_Actor.GetComponent<PlayerController> ().TurnInstant (m_OldFacingDirection); }
 
-    public TurnCommand (GameObject actor, bool isTurningRight) : base (actor)
+    public TurnCommand (GameObject actor, int newFacingDirection, int oldFacingDirection) : base (actor)
     {
-        m_IsTurningRight = isTurningRight;
+        m_NewFacingDirection = newFacingDirection;
+        m_OldFacingDirection = oldFacingDirection;
     }
 
-    private bool m_IsTurningRight;
+    private int m_NewFacingDirection;
+    private int m_OldFacingDirection;
 }
 
 public class ToggleGrabCommand : Command

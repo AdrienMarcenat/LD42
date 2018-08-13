@@ -35,7 +35,7 @@ public class PlayerInputGameEvent : GameEvent
 public class InputManager
 {
     private Dictionary<string, KeyCode> m_KeyCodes;
-    private static string ms_InputFileName = "Datas/Input.txt";
+    private static string ms_InputFileName = "/Input.txt";
 
     public InputManager ()
     {
@@ -92,9 +92,7 @@ public class InputManager
     private void FillKeyCodes (string filename)
     {
         char[] separators = { ':' };
-#if UNITY_EDITOR
-        filename = "Assets/" + filename;
-#endif
+        filename = Application.streamingAssetsPath + filename;
 
         string[] lines = File.ReadAllLines (filename);
 

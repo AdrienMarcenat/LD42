@@ -2,7 +2,6 @@
 {
     public override void OnEnter ()
     {
-        LevelManagerProxy.Get ().SetLevelIndex (0);
         LevelManagerProxy.Get ().LoadScene ("Scenes/LevelSelection");
         this.RegisterAsListener ("Game", typeof (GameFlowEvent));
     }

@@ -15,9 +15,8 @@ public static class LevelParser
 
     public static TileCoordinates GenLevel (string filename)
     {
-#if UNITY_EDITOR
-        filename = "Assets/" + filename;
-#endif
+        filename = Application.streamingAssetsPath + filename;
+
         string[] lines = File.ReadAllLines (filename);
         int x = 0;
         int y = 0;

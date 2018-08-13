@@ -49,12 +49,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void AddTurnCommand (bool isTurningRight)
+    private void AddTurnCommand (int facingDirection)
     {
-        int direction = isTurningRight ? 1 : -1;
-        if (CanTurn (Modulo ((int)m_FacingDirection + direction, 4)))
+        if (CanTurn (facingDirection))
         {
-            TurnCommand command = new TurnCommand (gameObject, isTurningRight);
+            TurnCommand command = new TurnCommand (gameObject, facingDirection, (int)m_FacingDirection);
             command.Execute ();
             CommandStackProxy.Get ().PushCommand (command);
         }
@@ -82,7 +81,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnGameEvent (PlayerInputGameEvent inputEvent)
     {
-        if(UpdaterProxy.Get().IsPaused())
+        if (UpdaterProxy.Get ().IsPaused ())
         {
             return;
         }
@@ -106,10 +105,16 @@ public class PlayerController : MonoBehaviour
                     AddMoveCommand (0, -1);
                     break;
                 case "TurnRight":
-                    AddTurnCommand (true);
+                    AddTurnCommand ((int)EFacingDirection.Right);
                     break;
                 case "TurnLeft":
-                    AddTurnCommand (false);
+                    AddTurnCommand ((int)EFacingDirection.Left);
+                    break;
+                case "TurnUp":
+                    AddTurnCommand ((int)EFacingDirection.Up);
+                    break;
+                case "TurnDown":
+                    AddTurnCommand ((int)EFacingDirection.Down);
                     break;
                 case "Grab / Ungrab":
                     AddToggleGrabCommand ();
@@ -136,7 +141,7 @@ public class PlayerController : MonoBehaviour
         transform.position = m_TargetPos;
     }
 
-    private void MoveInternal(int xDir, int yDir)
+    private void MoveInternal (int xDir, int yDir)
     {
         m_TargetPos = new Vector3 (transform.position.x + xDir.ToWorldUnit (), transform.position.y + yDir.ToWorldUnit (), transform.position.z);
     }
@@ -178,9 +183,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void SetBinCoordinates()
+    private void SetBinCoordinates ()
     {
-        if(m_Bin != null)
+        if (m_Bin != null)
         {
             m_Bin.SetCoordinates (GetFacingTileCoordinates ());
         }
@@ -242,32 +247,38 @@ public class PlayerController : MonoBehaviour
         return currentTileCoordinates + facingTileOffset;
     }
 
-    public void Turn (bool isTurningRight)
+    public void Turn (int directionToFace)
     {
-        TurnInternal (isTurningRight);
-        StartCoroutine (TurnRoutine (isTurningRight ? 1 : -1));
+        int direction = TurnInternal (directionToFace);
+        if (direction != 0)
+        {
+            StartCoroutine (TurnRoutine (direction));
+        }
     }
 
-    public void TurnInstant (bool isTurningRight)
+    public void TurnInstant (int directionToFace)
     {
         StopMovement ();
-        TurnInternal (isTurningRight);
-        transform.rotation = Quaternion.Euler (m_TargetAngle);
+        SetFacingDirection ((EFacingDirection)directionToFace);
     }
 
-    private void TurnInternal (bool isTurningRight)
+    private int TurnInternal (int directionToFace)
     {
         m_OldAngle = transform.rotation.eulerAngles;
-        int direction = isTurningRight ? 1 : -1;
-        m_FacingDirection = (EFacingDirection)Modulo ((int)m_FacingDirection + direction, 4);
-        if (isTurningRight)
+
+        if ((int)m_FacingDirection == Modulo (directionToFace + 1, 4))
         {
             m_TargetAngle = transform.rotation.eulerAngles + new Vector3 (0, 0, 90);
+            m_FacingDirection = (EFacingDirection)directionToFace;
+            return -1;
         }
-        else
+        else if ((int)m_FacingDirection == Modulo (directionToFace - 1, 4))
         {
             m_TargetAngle = transform.rotation.eulerAngles + new Vector3 (0, 0, -90);
+            m_FacingDirection = (EFacingDirection)directionToFace;
+            return 1;
         }
+        return 0;
     }
 
     private void SetIsTurning (bool isMoving)
