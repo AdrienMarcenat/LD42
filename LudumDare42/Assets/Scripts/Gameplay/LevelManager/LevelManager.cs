@@ -41,12 +41,13 @@ public class LevelManager
     private static string ms_LevelFilename = "Datas/LevelNames.txt";
     private TileCoordinates m_LevelDimension;
     private ELevelMode m_LevelMode = ELevelMode.Normal;
+    private bool m_SkipDialogue = false;
 
     public LevelManager ()
     {
         m_LevelDimension = new TileCoordinates (0, 0);
         m_LevelIdToName = new Dictionary<int, string> ();
-        m_LevelIdToScore = new Dictionary<int, int>();
+        m_LevelIdToScore = new Dictionary<int, int> ();
         FillLevelNames (ms_LevelFilename);
         FillLevelScores ();
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -57,7 +58,7 @@ public class LevelManager
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    public ELevelMode GetMode()
+    public ELevelMode GetMode ()
     {
         return m_LevelMode;
     }
@@ -114,6 +115,7 @@ public class LevelManager
             m_LevelDimension = LevelParser.GenLevel ("Datas/Level" + m_CurrentLevel + ".txt");
             new LevelEvent (m_CurrentLevel, true).Push ();
             new BinSpawnEvent (true, 0).Push ();
+            new DialogueEvent (GetCurrentLevelName ()).Push ();
         }
     }
 
@@ -162,11 +164,15 @@ public class LevelManager
         return m_LevelIdToScore[m_CurrentLevel];
     }
 
-    public void OnLevelEnd()
+    public void OnLevelEnd ()
     {
-        int score = CommandStackProxy.Get().GetNumberOfCommand();
-        PlayerPrefs.SetInt (GetCurrentLevelName (), score);
-        m_LevelIdToScore[m_CurrentLevel] = score;
+        int score = CommandStackProxy.Get ().GetNumberOfCommand ();
+        int prevScore = m_LevelIdToScore[m_CurrentLevel];
+        if (score < prevScore || prevScore == -1)
+        {
+            PlayerPrefs.SetInt (GetCurrentLevelName (), score);
+            m_LevelIdToScore[m_CurrentLevel] = score;
+        }
     }
 }
 

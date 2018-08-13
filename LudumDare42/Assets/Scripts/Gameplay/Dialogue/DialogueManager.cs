@@ -4,22 +4,60 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
+public class DialogueEvent : GameEvent
+{
+    public DialogueEvent(string dialogueTag) : base("Dialogue")
+    {
+        m_DialogueTag = dialogueTag;
+    }
+
+    public string GetDialogueTag()
+    {
+        return m_DialogueTag;
+    }
+
+    private string m_DialogueTag;
+}
+
 public class DialogueManager : MonoBehaviour
 {
     [SerializeField] private Text m_DialogeText;
     [SerializeField] private Text m_NameText;
     [SerializeField] private Animator m_Animator;
+    [SerializeField] private Image m_Thumbnail;
 
     private Queue<Dialogue.Sentence> m_Sentences;
     private static string ms_DialogueFileName = "Datas/Dialogues.txt";
 
-    void Start ()
+    void Awake ()
     {
         m_Sentences = new Queue<Dialogue.Sentence> ();
+        this.RegisterAsListener ("Player", typeof (PlayerInputGameEvent));
+        this.RegisterAsListener ("Dialogue", typeof (DialogueEvent));
+    }
+
+    private void OnDestroy ()
+    {
+        this.UnregisterAsListener ("Dialogue");
+        this.UnregisterAsListener ("Player");
+    }
+
+    public void OnGameEvent (DialogueEvent dialogueEvent)
+    {
+        TriggerDialogue (dialogueEvent.GetDialogueTag ());
+    }
+
+    public void OnGameEvent (PlayerInputGameEvent inputEvent)
+    {
+        if (inputEvent.GetInput () == "Submit" && inputEvent.GetInputState () == EInputState.Down)
+        {
+            DisplayNextSentence ();
+        }
     }
 
     public void StartDialogue (Dialogue dialogue)
     {
+        new GameFlowEvent (EGameFlowAction.StartDialogue).Push ();
         m_Animator.SetBool ("IsOpen", true);
         m_Sentences.Clear ();
 
@@ -40,7 +78,12 @@ public class DialogueManager : MonoBehaviour
         }
         StopAllCoroutines ();
         Dialogue.Sentence sentence = m_Sentences.Dequeue ();
-        m_NameText.text = sentence.m_Name;
+        string speakerName = sentence.m_Name;
+        if (m_NameText.text != speakerName)
+        {
+            m_NameText.text = speakerName;
+            m_Thumbnail.sprite = RessourceManager.LoadSprite (speakerName, 0);
+        }
         StartCoroutine (TypeSentence (sentence.m_Sentence));
     }
 
@@ -57,6 +100,7 @@ public class DialogueManager : MonoBehaviour
     public void EndDialogue ()
     {
         m_Animator.SetBool ("IsOpen", false);
+        new GameFlowEvent (EGameFlowAction.EndDialogue).Push ();
     }
 
     public void TriggerDialogue (string tag)
@@ -101,7 +145,7 @@ public class DialogueManager : MonoBehaviour
                 this.DebugLog ("Invalid number of data line " + i + " expecting 2, got " + datas.Length);
                 return;
             }
-            dialogue.m_Sentences.Add (new Dialogue.Sentence (datas[0], datas[1]));
+            dialogue.m_Sentences.Add (new Dialogue.Sentence (datas[0].Trim(), datas[1]));
         }
 
         StartDialogue (dialogue);

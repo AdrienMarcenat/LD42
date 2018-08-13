@@ -61,6 +61,14 @@ public class InputManager
                 new PlayerInputGameEvent (inputName, EInputState.Held).Push ();
             }
         }
+        if(Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown (KeyCode.Space))
+        {
+            new PlayerInputGameEvent ("Submit", EInputState.Down).Push ();
+        }
+        if (Input.GetKeyDown (KeyCode.Escape))
+        {
+            new PlayerInputGameEvent ("Escape", EInputState.Down).Push ();
+        }
     }
 
     public Dictionary<string, KeyCode> GetInputs ()

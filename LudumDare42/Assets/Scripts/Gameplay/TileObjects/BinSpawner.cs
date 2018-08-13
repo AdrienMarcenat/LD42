@@ -75,7 +75,7 @@ public class BinSpawner : TileObject
         binGameObject.transform.position = new Vector3 (coordinates.x.ToWorldUnit (), coordinates.y.ToWorldUnit (), 0);
         Bin bin = binGameObject.GetComponent<Bin> ();
         bin.Init (ETileObjectType.Bin, coordinates.x, coordinates.y, new string[] { binNumber.ToString() });
-        bin.SetIsSpawned (true);
+        bin.SetSpawnedCommandNumber ();
         TileManagerProxy.Get ().SetTileObject (coordinates, bin);
         ms_BinNumber++;
     }

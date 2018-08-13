@@ -7,6 +7,8 @@
     LevelSelection,
     Menu,
     EndLevel,
+    StartDialogue,
+    EndDialogue,
     Quit,
 }
 
@@ -31,6 +33,7 @@ public class GameFlowHSM : HSM
         : base (new GameFlowMenuState ()
               , new GameFlowLevelSelectionState()
               , new GameFlowLevelState ()
+              , new GameFlowDialogueState()
               , new GameFlowPauseState ()
               , new GameFlowEndLevelState ()
         )

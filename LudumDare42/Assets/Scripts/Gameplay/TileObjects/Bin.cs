@@ -5,7 +5,7 @@ using UnityEngine;
 public class Bin : TileObject
 {
     [SerializeField] private int m_Number;
-    private bool m_IsSpawned = false;
+    private int m_SpawnedAtCommandNumber = -1;
 
     public override void Init (ETileObjectType type, int x, int y, string[] args)
     {
@@ -37,13 +37,13 @@ public class Bin : TileObject
         return m_Number;
     }
 
-    public bool IsSpawned ()
+    public bool IsSpawnedAtCommandNumber ()
     {
-        return m_IsSpawned;
+        return m_SpawnedAtCommandNumber == CommandStackProxy.Get ().GetNumberOfCommand () + 1;
     }
 
-    public void SetIsSpawned (bool isSpawned)
+    public void SetSpawnedCommandNumber ()
     {
-        m_IsSpawned = isSpawned;
+        m_SpawnedAtCommandNumber = CommandStackProxy.Get ().GetNumberOfCommand (); ;
     }
 }

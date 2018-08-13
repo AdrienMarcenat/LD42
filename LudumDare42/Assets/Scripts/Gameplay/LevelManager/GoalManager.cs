@@ -71,7 +71,7 @@ public class GoalManager
                 return;
             }
             int nextBinNumber = bin.GetNumber () + 1;
-            if (!m_BinNumberSpawned.Contains(nextBinNumber)) 
+            if (!m_BinNumberSpawned.Contains(nextBinNumber) && nextBinNumber < m_BinGoals.Count) 
             {
                 new BinSpawnEvent (true, nextBinNumber).Push ();
             }
@@ -86,7 +86,7 @@ public class GoalManager
             int nextBinNumber = bin.GetNumber () + 1;
             foreach (Bin existingBin in m_Bins)
             {
-                if(existingBin.GetNumber() == nextBinNumber && existingBin.IsSpawned() && undo)
+                if(existingBin.GetNumber() == nextBinNumber && existingBin.IsSpawnedAtCommandNumber() && undo)
                 {
                     new BinSpawnEvent (false, nextBinNumber).Push ();
                     break;

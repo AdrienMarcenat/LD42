@@ -1,0 +1,6 @@
+
+Tuto
+[
+	cust-cat-1:"Hello, world !"
+	cust-swan-2:"Hello, Bob !"
+]
