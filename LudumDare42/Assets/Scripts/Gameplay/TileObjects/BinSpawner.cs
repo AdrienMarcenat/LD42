@@ -36,6 +36,7 @@ public class BinSpawnCommand : Command
 
 public class BinSpawner : TileObject
 {
+    [SerializeField] private AudioClip m_FallingSound;
     private GameObject m_BinPrefab;
     private Animator m_Animator;
     public static int ms_BinNumber;
@@ -81,6 +82,7 @@ public class BinSpawner : TileObject
     IEnumerator SpawnRountine (int binNumber)
     {
         m_Animator.SetBool ("IsSpawning", true);
+        SoundManagerProxy.Get ().PlayMultiple (m_FallingSound);
         UpdaterProxy.Get ().SetPause (true);
         yield return new WaitForSeconds (1f);
 

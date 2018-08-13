@@ -72,6 +72,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Type: 3
+  m_FallingSound: {fileID: 8300000, guid: 99188bad289346f49bba136a935426e5, type: 3}
 --- !u!212 &212732738365542882
 SpriteRenderer:
   m_ObjectHideFlags: 1
