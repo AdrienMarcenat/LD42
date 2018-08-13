@@ -129,6 +129,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6662566214777de41b65480d4fd1040b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &118987750 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4778993090554472, guid: 5bb248ca3513597448e252c3a63811cb,
+    type: 2}
+  m_PrefabInternal: {fileID: 1667365312}
 --- !u!1001 &138703004
 Prefab:
   m_ObjectHideFlags: 0
@@ -494,6 +499,48 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 20084672740440758, guid: 5bb248ca3513597448e252c3a63811cb,
     type: 2}
   m_PrefabInternal: {fileID: 1667365312}
+--- !u!1001 &1770143601
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 118987750}
+    m_Modifications:
+    - target: {fileID: 4025187337588024, guid: 16a87fd5354de7a42a8e99ca72ab49fa, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4025187337588024, guid: 16a87fd5354de7a42a8e99ca72ab49fa, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4025187337588024, guid: 16a87fd5354de7a42a8e99ca72ab49fa, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4025187337588024, guid: 16a87fd5354de7a42a8e99ca72ab49fa, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4025187337588024, guid: 16a87fd5354de7a42a8e99ca72ab49fa, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4025187337588024, guid: 16a87fd5354de7a42a8e99ca72ab49fa, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4025187337588024, guid: 16a87fd5354de7a42a8e99ca72ab49fa, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4025187337588024, guid: 16a87fd5354de7a42a8e99ca72ab49fa, type: 2}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 16a87fd5354de7a42a8e99ca72ab49fa, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1001 &1843473544
 Prefab:
   m_ObjectHideFlags: 0
