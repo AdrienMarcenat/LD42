@@ -1,6 +1,6 @@
 N,Wall,Down,wall-corner	    N,Wall,Down,wall	              N,Wall,Down,wall  N,Wall,Down,wall	  N,Wall,Left,wall-corner                          
 N,Wall,Right,wall	        N,BinGoal,0              	      N                 N                     N,Wall,Left,wall                             
-N,Wall,Right,wall-corner       N,Wall,Right,wall-corner-reversed N	                N              	      N,Wall,Left,wall                
+N,Wall,Right,wall-corner    N,Wall,Right,wall-corner-reversed N	                N              	      N,Wall,Left,wall                
 N,Wall,Down,wall-corner		N,Wall,Down,wall-corner-reversed  N			        N                     N,Wall,Left,wall
 N,Wall,Right,wall		    N,Bin,0                           N			        N,Player,Down         N,Wall,Left,wall
 N,Wall,Right,wall-corner    N,Wall,Up,wall                    N,Wall,Up,wall    N,Wall,Up,wall        N,Wall,Up,wall-corner             

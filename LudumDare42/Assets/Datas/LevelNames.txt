@@ -1,10 +1,16 @@
-﻿0:Level0
-1:Level1
-2:Level2
-3:Level3
-4:Tuto1
-5:Tuto2
-6:Tuto3
-7:Tuto4
-8:Tuto5
-9:Tuto6
+﻿0:An easy move
+1:Turn around
+2:More space
+3:Drive yourself into a corner
+4:Let go
+5:Mister Crab
+6:Volte-face
+7:Twice as work
+8:Three precious thing
+9:Messy living room
+10:Unreachable
+11:Don't rush
+12:Just enough place
+13:Merry-go-round
+14:One way
+15:Lateral thinking

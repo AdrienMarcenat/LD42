@@ -1,0 +1,5 @@
+X	                        X	                              N,Wall,Down,wall-corner           N,Wall,Down,wall	  N,Wall,Left,wall-corner                          
+X	                        N,Wall,Down,wall-corner           N,Wall,Down,wall-corner-reversed  N,BinGoal,0           N,Wall,Left,wall                             
+N,Wall,Down,wall-corner     N,Wall,Down,wall-corner-reversed C,Wall,Down,carpet-round	        N              	      N,Wall,Left,wall                              
+N,Wall,Right,wall           N,BinSpawner                      N                                 N,Player,Down         N,Wall,Left,wall                 
+N,Wall,Right,wall-corner		N,Wall,Up,wall                    N,Wall,Up,wall                    N,Wall,Up,wall        N,Wall,Up,wall-corner             
