@@ -13,5 +13,5 @@
 12:Just enough place
 13:Merry-go-round
 14:One way
-15:Lateral thinking
-16:Mean
+15:Mean
+16:Lateral thinking
