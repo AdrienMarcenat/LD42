@@ -5,12 +5,13 @@ using UnityEngine.UI;
 public class LevelSelectionMenu : MonoBehaviour
 {
     [SerializeField] private GameObject m_LevelPrefab;
+    [SerializeField] private Text m_BestNumber;
+    [SerializeField] private Text m_CurrenLevelName;
+
     private Transform[] m_LevelPositions;
-    private Text m_CurrenLevelName;
 
     private void Start ()
     {
-        m_CurrenLevelName = GetComponent<Text> ();
         m_LevelPositions = GameObject.Find ("LevelPositions").GetComponentsInChildren<Transform> ().SubArray (1);
         Dictionary<int, string> levelIdToNames = LevelManagerProxy.Get ().GetLevelNames ();
         foreach (int id in levelIdToNames.Keys)
@@ -22,7 +23,9 @@ public class LevelSelectionMenu : MonoBehaviour
 
     private void Update ()
     {
-        m_CurrenLevelName.text = LevelManagerProxy.Get ().GetCurrentLevelName () + " Best: " + LevelManagerProxy.Get ().GetCurrentLevelScore ();
+        int best = LevelManagerProxy.Get ().GetCurrentLevelScore ();
+        m_BestNumber.text = best > 0 ? best.ToString () : "";
+        m_CurrenLevelName.text = LevelManagerProxy.Get ().GetCurrentLevelName ();
         if (Input.GetKeyDown (KeyCode.Return) || Input.GetKeyDown (KeyCode.Space))
         {
             new GameFlowEvent (EGameFlowAction.Start).Push ();
