@@ -130,6 +130,7 @@ public class DialogueManager : MonoBehaviour
             if (dialogueBeginning > 0 && datas.Length == 1 && datas[0] == "]")
             {
                 dialogueEnd = i;
+                break;
             }
         }
         if (dialogueBeginning == 0)

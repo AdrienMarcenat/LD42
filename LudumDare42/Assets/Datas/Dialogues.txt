@@ -4,3 +4,8 @@ Tuto
 	cust-cat-1:"Hello, world !"
 	cust-swan-2:"Hello, Bob !"
 ]
+
+Cannot Spawn
+[
+	cust-cat-1:"Oh René ! Pousse ta caisse !"
+]

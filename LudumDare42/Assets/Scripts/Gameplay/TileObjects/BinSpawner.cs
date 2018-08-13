@@ -67,6 +67,8 @@ public class BinSpawner : TileObject
     {
         if (!TileManagerProxy.Get ().GetTile (GetCoordinates ()).IsEmpty ())
         {
+            new DialogueEvent ("Cannot Spawn").Push ();
+            CommandStackProxy.Get ().PopCommand ().Undo ();
             return;
         }
 
