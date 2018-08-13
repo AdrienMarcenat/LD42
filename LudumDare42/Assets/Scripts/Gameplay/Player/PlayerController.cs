@@ -84,6 +84,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public bool IsHolding()
+    {
+        return m_Bin != null;
+    }
+
     public void OnGameEvent (PlayerInputGameEvent inputEvent)
     {
         if (UpdaterProxy.Get ().IsPaused ())

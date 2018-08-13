@@ -16,7 +16,7 @@ public class GameGUI : MonoBehaviour
 
     private void Update ()
     {
-        m_MoveNumber.text = CommandStackProxy.Get ().GetNumberOfCommand ().ToString();
+        m_MoveNumber.text = LevelManagerProxy.Get().GetNumberOfMove().ToString();
     }
 
 }

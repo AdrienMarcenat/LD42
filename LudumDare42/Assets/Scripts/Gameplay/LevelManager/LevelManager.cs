@@ -42,6 +42,7 @@ public class LevelManager
     private TileCoordinates m_LevelDimension;
     private ELevelMode m_LevelMode = ELevelMode.Normal;
     private bool m_SkipDialogue = false;
+    private int m_NumberOfMove = 0;
 
     public LevelManager ()
     {
@@ -125,6 +126,7 @@ public class LevelManager
             TileManagerProxy.Get ().Reset ();
             GoalManagerProxy.Get ().Reset ();
             CommandStackProxy.Get ().Reset ();
+            m_NumberOfMove = 0;
             string levelName = GetCurrentLevelName ();
             m_LevelDimension = LevelParser.GenLevel ("/" + levelName + ".txt");
             new LevelEvent (m_CurrentLevel, true).Push ();
@@ -176,9 +178,24 @@ public class LevelManager
         return m_LevelIdToScore[m_CurrentLevel];
     }
 
+    public void IncreaseNumberOfMove()
+    {
+        m_NumberOfMove++;
+    }
+
+    public void DecreaseNumberOfMove ()
+    {
+        m_NumberOfMove--;
+    }
+
+    public int GetNumberOfMove ()
+    {
+       return  m_NumberOfMove;
+    }
+
     public void OnLevelEnd ()
     {
-        int score = CommandStackProxy.Get ().GetNumberOfCommand ();
+        int score = m_NumberOfMove;
         int prevScore = m_LevelIdToScore[m_CurrentLevel];
         if (score < prevScore || prevScore == -1)
         {

@@ -19,7 +19,7 @@ An easy move-end
 
 Turn around-start
 [
-	Mousy-the-Mover:"What are you looking at ? The box is behind you ! Just turn with Q and D"
+	Mousy-the-Mover:"What are you looking at ? The box is behind you ! Just turn with ZQSD"
 ]
 
 Turn around-end

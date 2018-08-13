@@ -3,8 +3,25 @@ using UnityEngine;
 
 public class MoveCommand : Command
 {
-    public override void Execute () { m_Actor.GetComponent<PlayerController> ().Move (m_XDir, m_YDir); }
-    public override void Undo () { m_Actor.GetComponent<PlayerController> ().MoveInstant (-m_XDir, -m_YDir); }
+    public override void Execute ()
+    {
+        PlayerController controller = m_Actor.GetComponent<PlayerController> ();
+        if(controller.IsHolding())
+        {
+            LevelManagerProxy.Get ().IncreaseNumberOfMove ();
+        }
+        controller.Move (m_XDir, m_YDir);
+    }
+
+    public override void Undo ()
+    {
+        PlayerController controller = m_Actor.GetComponent<PlayerController> ();
+        if (controller.IsHolding ())
+        {
+            LevelManagerProxy.Get ().DecreaseNumberOfMove ();
+        }
+        controller.MoveInstant (-m_XDir, -m_YDir);
+    }
 
     public MoveCommand (GameObject actor, int xDir, int yDir) : base (actor)
     {
@@ -18,8 +35,24 @@ public class MoveCommand : Command
 
 public class TurnCommand : Command
 {
-    public override void Execute () { m_Actor.GetComponent<PlayerController> ().Turn (m_NewFacingDirection); }
-    public override void Undo () { m_Actor.GetComponent<PlayerController> ().TurnInstant (m_OldFacingDirection); }
+    public override void Execute ()
+    {
+        PlayerController controller = m_Actor.GetComponent<PlayerController> ();
+        if (controller.IsHolding ())
+        {
+            LevelManagerProxy.Get ().IncreaseNumberOfMove ();
+        }
+        controller.Turn (m_NewFacingDirection);
+    }
+    public override void Undo ()
+    {
+        PlayerController controller = m_Actor.GetComponent<PlayerController> ();
+        if (controller.IsHolding ())
+        {
+            LevelManagerProxy.Get ().DecreaseNumberOfMove ();
+        }
+        controller.TurnInstant (m_OldFacingDirection);
+    }
 
     public TurnCommand (GameObject actor, int newFacingDirection, int oldFacingDirection) : base (actor)
     {
